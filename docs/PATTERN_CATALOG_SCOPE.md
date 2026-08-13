@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 239 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 240 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -22,7 +22,8 @@ scope. The first additions are POSA Volume 1's Blackboard pattern, modelled as
 independent knowledge sources that refine one shared fact set, Broker, modelled
 as an intermediary that resolves a client request to a named service, PAC,
 which keeps presentation, abstraction state and control responsibilities apart,
-and Reflection, which selects a declared operation through metadata.
+Reflection, which selects a declared operation through metadata, and
+Master-Slave, which distributes work and combines the worker results.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

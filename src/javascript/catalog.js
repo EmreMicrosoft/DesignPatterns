@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 239;
+const EXPECTED_PATTERN_COUNT = 240;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -36,6 +36,12 @@ function reflectionContract() {
   return operation("catalogue") === "CATALOGUE";
 }
 
+function masterSlaveContract() {
+  const workers = [(value) => value * 2, (value) => value * 3];
+  const results = workers.map((worker) => worker(2));
+  return results.reduce((sum, result) => sum + result, 0) === 10;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -54,6 +60,7 @@ const contracts = Object.freeze({
   broker: brokerContract,
   pac: pacContract,
   reflection: reflectionContract,
+  "master-slave": masterSlaveContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

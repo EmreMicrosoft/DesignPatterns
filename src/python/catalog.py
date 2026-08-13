@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 239
+EXPECTED_PATTERN_COUNT = 240
 
 
 @dataclass(frozen=True)
@@ -75,12 +75,18 @@ def contracts() -> dict[str, Callable[[], bool]]:
         operation = getattr(Formatter, "upper")
         return operation("catalogue") == "CATALOGUE"
 
+    def master_slave() -> bool:
+        workers = [lambda value: value * 2, lambda value: value * 3]
+        results = [worker(2) for worker in workers]
+        return sum(results) == 10
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
         "broker": broker,
         "pac": pac,
         "reflection": reflection,
+        "master-slave": master_slave,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

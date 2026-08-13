@@ -2,7 +2,7 @@
 
 > [English](README_EN.md) | [Türkçe](README_TR.md) | [MIT License](LICENSE)
 
-An independently authored, executable catalogue of 245 design-pattern records.
+An independently authored, executable catalogue of 246 design-pattern records.
 It covers the complete GoF, PoEAA, Enterprise Integration Patterns,
 Microservices.io and Azure Cloud Design Patterns catalogues, plus a documented
 set of common DDD, architecture and concurrency patterns. The examples are
@@ -17,6 +17,7 @@ small learning references, not copy-paste production templates.
 | Enterprise Integration Patterns | 65 messaging and integration-style patterns |
 | Microservices.io | Complete listed microservice pattern language |
 | Azure Cloud Design Patterns | Complete listed cloud pattern catalogue |
+| POSA Volume 1 | All 17 architectural patterns, design patterns and idioms |
 | Supplemental | 19 common DDD, architecture and concurrency patterns |
 
 ## Languages
@@ -24,10 +25,10 @@ small learning references, not copy-paste production templates.
 | Language | Location | Form |
 | --- | --- | --- |
 | C# | `src/DesignPatterns.Catalog/` | Detailed .NET 10 examples for the foundational 38 patterns |
-| Python | `src/python/catalog.py` | Standard-library contracts for all 245 records |
-| JavaScript | `src/javascript/catalog.js` | Node.js contracts for all 245 records |
-| TypeScript | `src/typescript/catalog.ts` | Strictly typed contracts for all 245 records |
-| C++ | `src/cpp/catalog.cpp` | C++20 contracts for all 245 records |
+| Python | `src/python/catalog.py` | Standard-library contracts for all 246 records |
+| JavaScript | `src/javascript/catalog.js` | Node.js contracts for all 246 records |
+| TypeScript | `src/typescript/catalog.ts` | Strictly typed contracts for all 246 records |
+| C++ | `src/cpp/catalog.cpp` | C++20 contracts for all 246 records |
 
 The single source of truth is
 [`src/shared/pattern-catalog.tsv`](src/shared/pattern-catalog.tsv). Every record
@@ -51,7 +52,7 @@ static type check is required.
 ./scripts/verify-all.ps1
 ```
 
-The script validates the 38 C# examples and all 245 Python, JavaScript and
+The script validates the 38 C# examples and all 246 Python, JavaScript and
 TypeScript contracts. It compiles and runs C++ when a compiler is available;
 otherwise it emits an explicit warning. If `tsc` is available, the script also
 runs a strict static type check. To validate only the C# catalogue, run

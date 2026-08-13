@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 245;
+constexpr std::size_t ExpectedPatternCount = 246;
 
 struct PatternDefinition {
     std::string identifier;
@@ -64,6 +64,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"forwarder-receiver", [] { const auto receiver = [](const std::string& payload) { return "received:" + payload; }; const auto forwarder = [&](const std::string& message) { return receiver(message.substr(std::string{"send:"}.size())); }; return forwarder("send:invoice") == "received:invoice"; }},
         {"whole-part", [] { struct Folder { std::vector<int> parts; void addPart(int size) { parts.push_back(size); } int totalSize() const { int total = 0; for (const auto size : parts) total += size; return total; } }; Folder archive; archive.addPart(3); archive.addPart(5); return archive.totalSize() == 8; }},
         {"client-dispatcher-server", [] { const std::unordered_map<std::string, std::function<std::string(int)>> servers{{"calculate", [](int payload) { return "result:" + std::to_string(payload * 2); }}}; const auto dispatcher = [&](const std::string& operation, int payload) { return servers.at(operation)(payload); }; const auto client = [&] { return dispatcher("calculate", 21); }; return client() == "result:42"; }},
+        {"counted-pointer", [] { struct SharedHandle { std::string value; int references{1}; SharedHandle acquire() { ++references; return *this; } int release() { return --references; } }; SharedHandle document{"invoice"}; const auto observer = document.acquire(); return observer.value == "invoice" && document.release() == 1; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

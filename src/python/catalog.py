@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 245
+EXPECTED_PATTERN_COUNT = 246
 
 
 @dataclass(frozen=True)
@@ -126,6 +126,24 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return client() == "result:42"
 
+    def counted_pointer() -> bool:
+        class SharedHandle:
+            def __init__(self, value: str) -> None:
+                self.value = value
+                self.references = 1
+
+            def acquire(self) -> "SharedHandle":
+                self.references += 1
+                return self
+
+            def release(self) -> int:
+                self.references -= 1
+                return self.references
+
+        document = SharedHandle("invoice")
+        observer = document.acquire()
+        return observer.value == "invoice" and document.release() == 1
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -138,6 +156,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "forwarder-receiver": forwarder_receiver,
         "whole-part": whole_part,
         "client-dispatcher-server": client_dispatcher_server,
+        "counted-pointer": counted_pointer,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

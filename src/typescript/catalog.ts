@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 245;
+const EXPECTED_PATTERN_COUNT = 246;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -86,6 +86,20 @@ function clientDispatcherServerContract(): boolean {
   return client() === "result:42";
 }
 
+function countedPointerContract(): boolean {
+  class SharedHandle {
+    #references = 1;
+    readonly value: string;
+    constructor(value: string) { this.value = value; }
+    acquire(): SharedHandle { this.#references += 1; return this; }
+    release(): number { this.#references -= 1; return this.#references; }
+  }
+
+  const document = new SharedHandle("invoice");
+  const observer = document.acquire();
+  return observer.value === "invoice" && document.release() === 1;
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -110,6 +124,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "forwarder-receiver": forwarderReceiverContract,
   "whole-part": wholePartContract,
   "client-dispatcher-server": clientDispatcherServerContract,
+  "counted-pointer": countedPointerContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

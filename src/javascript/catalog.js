@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 245;
+const EXPECTED_PATTERN_COUNT = 246;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -79,6 +79,19 @@ function clientDispatcherServerContract() {
   return client() === "result:42";
 }
 
+function countedPointerContract() {
+  class SharedHandle {
+    #references = 1;
+    constructor(value) { this.value = value; }
+    acquire() { this.#references += 1; return this; }
+    release() { this.#references -= 1; return this.#references; }
+  }
+
+  const document = new SharedHandle("invoice");
+  const observer = document.acquire();
+  return observer.value === "invoice" && document.release() === 1;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -103,6 +116,7 @@ const contracts = Object.freeze({
   "forwarder-receiver": forwarderReceiverContract,
   "whole-part": wholePartContract,
   "client-dispatcher-server": clientDispatcherServerContract,
+  "counted-pointer": countedPointerContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

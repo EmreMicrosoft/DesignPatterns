@@ -3,9 +3,9 @@
 > [Varsayılan README](README.md) | [English](README_EN.md) | [MIT Lisansı](LICENSE)
 
 GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure Cloud
-Design Patterns, POSA Volume 1 ekleri ve seçilmiş DDD, mimari ve eşzamanlılık
-desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 245 kayıtlı
-katalogdur.
+Design Patterns, eksiksiz POSA Volume 1 kataloğu ve seçilmiş DDD, mimari ve
+eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 246
+kayıtlı katalogdur.
 
 ## Diller ve mimari
 
@@ -16,8 +16,8 @@ katalogdur.
   kimliği, kaynak kataloğu, ailesi ve çalıştırılabilir concern için tek doğruluk
   kaynağıdır.
 
-En son eklenen POSA Volume 1 Client-Dispatcher-Server desenidir: istemci bir
-işlemi dispatcher üzerinden ister, dispatcher uygun sunucuyu çözer.
+En son eklenen POSA Volume 1 Counted Pointer idiom’udur: paylaşılan handle,
+istemciler edinip bıraktıkça açık referans sahipliğini korur.
 
 ## Doğrulama
 

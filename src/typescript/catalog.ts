@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 241;
+const EXPECTED_PATTERN_COUNT = 242;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -56,6 +56,11 @@ function commandProcessorContract(): boolean {
   return executed.join(",") === "refresh";
 }
 
+function viewHandlerContract(): boolean {
+  const commands = new Map<string, () => string>([["save-clicked", () => "save-document"]]);
+  return commands.get("save-clicked")!() === "save-document";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -76,6 +81,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   reflection: reflectionContract,
   "master-slave": masterSlaveContract,
   "command-processor": commandProcessorContract,
+  "view-handler": viewHandlerContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

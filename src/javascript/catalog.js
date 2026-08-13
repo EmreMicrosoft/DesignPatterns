@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 241;
+const EXPECTED_PATTERN_COUNT = 242;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -49,6 +49,11 @@ function commandProcessorContract() {
   return executed.join(",") === "refresh";
 }
 
+function viewHandlerContract() {
+  const commands = new Map([["save-clicked", () => "save-document"]]);
+  return commands.get("save-clicked")() === "save-document";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -69,6 +74,7 @@ const contracts = Object.freeze({
   reflection: reflectionContract,
   "master-slave": masterSlaveContract,
   "command-processor": commandProcessorContract,
+  "view-handler": viewHandlerContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

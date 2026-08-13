@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 241
+EXPECTED_PATTERN_COUNT = 242
 
 
 @dataclass(frozen=True)
@@ -86,6 +86,10 @@ def contracts() -> dict[str, Callable[[], bool]]:
         pending.pop(0)()
         return executed == ["refresh"]
 
+    def view_handler() -> bool:
+        commands = {"save-clicked": lambda: "save-document"}
+        return commands["save-clicked"]() == "save-document"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -94,6 +98,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "reflection": reflection,
         "master-slave": master_slave,
         "command-processor": command_processor,
+        "view-handler": view_handler,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

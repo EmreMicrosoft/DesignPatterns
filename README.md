@@ -2,7 +2,7 @@
 
 > [English](README_EN.md) | [Türkçe](README_TR.md) | [MIT License](LICENSE)
 
-An independently authored, executable catalogue of 249 design-pattern records.
+An independently authored, executable catalogue of 250 design-pattern records.
 It covers the complete GoF, PoEAA, Enterprise Integration Patterns,
 Microservices.io and Azure Cloud Design Patterns catalogues, plus a documented
 set of common DDD, architecture and concurrency patterns. The examples are
@@ -25,10 +25,10 @@ small learning references, not copy-paste production templates.
 | Language | Location | Form |
 | --- | --- | --- |
 | C# | `src/DesignPatterns.Catalog/` | Detailed .NET 10 examples for the foundational 38 patterns |
-| Python | `src/python/catalog.py` | Standard-library contracts for all 249 records |
-| JavaScript | `src/javascript/catalog.js` | Node.js contracts for all 249 records |
-| TypeScript | `src/typescript/catalog.ts` | Strictly typed contracts for all 249 records |
-| C++ | `src/cpp/catalog.cpp` | C++20 contracts for all 249 records |
+| Python | `src/python/catalog.py` | Standard-library contracts for all 250 records |
+| JavaScript | `src/javascript/catalog.js` | Node.js contracts for all 250 records |
+| TypeScript | `src/typescript/catalog.ts` | Strictly typed contracts for all 250 records |
+| C++ | `src/cpp/catalog.cpp` | C++20 contracts for all 250 records |
 
 The single source of truth is
 [`src/shared/pattern-catalog.tsv`](src/shared/pattern-catalog.tsv). Every record
@@ -66,7 +66,7 @@ static type check is required.
 ./scripts/verify-all.ps1
 ```
 
-The script validates the 38 C# examples, all 249 Python, JavaScript and
+The script validates the 38 C# examples, all 250 Python, JavaScript and
 TypeScript contracts, and the browser catalogue's bilingual model. It compiles and runs C++ when a compiler is available;
 otherwise it emits an explicit warning. If `tsc` is available, the script also
 runs a strict static type check. To validate only the C# catalogue, run

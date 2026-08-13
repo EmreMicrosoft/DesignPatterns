@@ -232,6 +232,7 @@ counted-pointer|POSA1|resource-management|Counted Pointer|counted-pointer
 wrapper-facade|POSA2|architecture|Wrapper Facade|wrapper-facade
 component-configurator|POSA2|architecture|Component Configurator|component-configurator
 interceptor|POSA2|architecture|Interceptor|interceptor
+extension-interface|POSA2|architecture|Extension Interface|extension-interface
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

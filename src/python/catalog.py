@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 249
+EXPECTED_PATTERN_COUNT = 250
 
 
 @dataclass(frozen=True)
@@ -179,6 +179,18 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return audit_interceptor({"operation": "save"}, lambda request: request["audit"]) == "recorded"
 
+    def extension_interface() -> bool:
+        class Diagnostics:
+            def status(self) -> str:
+                return "diagnostics:ready"
+
+        class CatalogueComponent:
+            def extension(self, name: str) -> Diagnostics | None:
+                return Diagnostics() if name == "diagnostics" else None
+
+        diagnostics = CatalogueComponent().extension("diagnostics")
+        return diagnostics is not None and diagnostics.status() == "diagnostics:ready"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -195,6 +207,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "wrapper-facade": wrapper_facade,
         "component-configurator": component_configurator,
         "interceptor": interceptor,
+        "extension-interface": extension_interface,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

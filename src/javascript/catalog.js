@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 249;
+const EXPECTED_PATTERN_COUNT = 250;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -115,6 +115,12 @@ function interceptorContract() {
   return auditInterceptor({ operation: "save" }, (request) => request.audit) === "recorded";
 }
 
+function extensionInterfaceContract() {
+  class Diagnostics { status() { return "diagnostics:ready"; } }
+  class CatalogueComponent { extension(name) { return name === "diagnostics" ? new Diagnostics() : undefined; } }
+  return new CatalogueComponent().extension("diagnostics").status() === "diagnostics:ready";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -143,6 +149,7 @@ const contracts = Object.freeze({
   "wrapper-facade": wrapperFacadeContract,
   "component-configurator": componentConfiguratorContract,
   interceptor: interceptorContract,
+  "extension-interface": extensionInterfaceContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

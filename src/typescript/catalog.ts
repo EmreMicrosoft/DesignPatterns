@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 249;
+const EXPECTED_PATTERN_COUNT = 250;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -128,6 +128,12 @@ function interceptorContract(): boolean {
   return auditInterceptor({ operation: "save" }, (request) => request.audit!) === "recorded";
 }
 
+function extensionInterfaceContract(): boolean {
+  class Diagnostics { status(): string { return "diagnostics:ready"; } }
+  class CatalogueComponent { extension(name: string): Diagnostics | undefined { return name === "diagnostics" ? new Diagnostics() : undefined; } }
+  return new CatalogueComponent().extension("diagnostics")!.status() === "diagnostics:ready";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -156,6 +162,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "wrapper-facade": wrapperFacadeContract,
   "component-configurator": componentConfiguratorContract,
   interceptor: interceptorContract,
+  "extension-interface": extensionInterfaceContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

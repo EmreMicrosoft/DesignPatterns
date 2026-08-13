@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 249;
+export const EXPECTED_PATTERN_COUNT = 250;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -48,6 +48,7 @@ const scenarios = {
   "wrapper-facade": scenario(text("hide a low-level API behind a focused, safer interface", "düşük seviyeli bir API'yi odaklı ve daha güvenli bir arayüzün arkasına saklamak"), text("open catalogue connection", "katalog bağlantısını aç"), [text("The caller asks the facade for one domain operation.", "Çağıran taraf cepheden tek bir alan işlemi ister."), text("The facade chooses the low-level socket call and its defaults.", "Cephe düşük seviyeli soket çağrısını ve varsayılanlarını seçer."), text("The caller receives a simple connection result.", "Çağıran taraf basit bir bağlantı sonucu alır.")], () => "catalogue:443"),
   "component-configurator": scenario(text("build and start components from declared configuration", "bileşenleri bildirilen yapılandırmadan oluşturmak ve başlatmak"), text("component: cache", "bileşen: önbellek"), [text("Configuration names the component to activate.", "Yapılandırma etkinleştirilecek bileşeni adlandırır."), text("The configurator chooses the matching factory.", "Yapılandırıcı eşleşen fabrikayı seçer."), text("The created component starts with its declared defaults.", "Oluşturulan bileşen bildirilen varsayılanlarıyla başlar.")], () => "cache:ready"),
   interceptor: scenario(text("add a cross-cutting action around a request", "bir isteğin çevresine çapraz kesen bir eylem eklemek"), text("save request", "kaydet isteği"), [text("A request enters the interceptor chain.", "Bir istek interceptor zincirine girer."), text("The interceptor records its audit action.", "Interceptor denetim eylemini kaydeder."), text("The next handler receives the enriched request.", "Sonraki işleyici zenginleştirilmiş isteği alır.")], () => "audit: recorded"),
+  "extension-interface": scenario(text("offer optional capabilities without changing the base interface", "temel arayüzü değiştirmeden isteğe bağlı yetenek sunmak"), text("diagnostics extension", "tanılama uzantısı"), [text("A caller asks a component for an optional extension.", "Çağıran taraf bileşenden isteğe bağlı uzantı ister."), text("The component exposes the supported extension interface.", "Bileşen desteklenen uzantı arayüzünü sunar."), text("The caller uses the extension without changing the base component.", "Çağıran taraf temel bileşeni değiştirmeden uzantıyı kullanır.")], () => "diagnostics:ready"),
 };
 
 export function parseCatalogue(tsv) {

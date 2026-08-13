@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -12,7 +13,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 249;
+constexpr std::size_t ExpectedPatternCount = 250;
 
 struct PatternDefinition {
     std::string identifier;
@@ -68,6 +69,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"wrapper-facade", [] { struct SocketLibrary { std::string connect(const std::string& host, int port) const { return host + ":" + std::to_string(port); } }; struct CatalogueConnection { SocketLibrary socketLibrary; std::string open() const { return socketLibrary.connect("catalogue", 443); } }; return CatalogueConnection{}.open() == "catalogue:443"; }},
         {"component-configurator", [] { struct Cache { std::string start() const { return "cache:ready"; } }; const std::unordered_map<std::string, std::function<Cache()>> factories{{"cache", [] { return Cache{}; }}}; const auto configure = [&](const std::string& name) { return factories.at(name)().start(); }; return configure("cache") == "cache:ready"; }},
         {"interceptor", [] { std::unordered_map<std::string, std::string> request{{"operation", "save"}}; const auto auditInterceptor = [&](const std::function<std::string()>& next) { request["audit"] = "recorded"; return next(); }; return auditInterceptor([&] { return request.at("audit"); }) == "recorded"; }},
+        {"extension-interface", [] { struct Diagnostics { std::string status() const { return "diagnostics:ready"; } }; struct CatalogueComponent { std::optional<Diagnostics> extension(const std::string& name) const { return name == "diagnostics" ? std::optional<Diagnostics>{Diagnostics{}} : std::nullopt; } }; const auto diagnostics = CatalogueComponent{}.extension("diagnostics"); return diagnostics.has_value() && diagnostics->status() == "diagnostics:ready"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

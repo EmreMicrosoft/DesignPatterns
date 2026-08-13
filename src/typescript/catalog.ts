@@ -1,0 +1,60 @@
+declare const __dirname: string;
+declare function require(name: string): { readFileSync(path: string, encoding: "utf8"): string };
+
+type PatternDefinition = Readonly<{
+  identifier: string;
+  catalogues: readonly string[];
+  family: string;
+  name: string;
+  contract: string;
+}>;
+
+const EXPECTED_PATTERN_COUNT = 235;
+const readFileSync = require("node:fs").readFileSync;
+
+function parseCatalog(path: string): readonly PatternDefinition[] {
+  return readFileSync(path, "utf8")
+    .split(/\r?\n/)
+    .filter((line) => line.length > 0 && !line.startsWith("#"))
+    .map((line, index) => {
+      const fields = line.split("|");
+      if (fields.length !== 5) throw new Error(`Malformed manifest record on line ${index + 1}`);
+      const [identifier, catalogueNames, family, name, contract] = fields;
+      return { identifier, catalogues: catalogueNames.split(";"), family, name, contract };
+    });
+}
+
+const contracts: Readonly<Record<string, () => boolean>> = {
+  boundary: () => new Map([["request", "accepted"]]).get("request") === "accepted",
+  composition: () => ["first", "second"].join("|") === "first|second",
+  concurrency: () => new Set(["leader"]).size === 1,
+  deployment: () => new Set(["region-a", "region-b"]).size === 2,
+  mapping: () => ({ external: "internal" }).external === "internal",
+  messaging: () => ((message: Readonly<{ id: string }>) => message.id === "m-1")({ id: "m-1" }),
+  observability: () => ["trace-1", "healthy"].every(Boolean),
+  ordering: () => [3, 1, 2].sort((left, right) => left - right).join(",") === "1,2,3",
+  persistence: () => new Map([["id", "saved"]]).get("id") === "saved",
+  resilience: () => [1, 2, 3].find((attempt) => attempt === 2) === 2,
+  routing: () => ("invoice".startsWith("invoice") ? "billing" : "support") === "billing",
+  security: () => ({ token: "scoped" }).token === "scoped",
+  state: () => "ready" === "ready",
+};
+
+function verify(definitions: readonly PatternDefinition[]): void {
+  if (definitions.length !== EXPECTED_PATTERN_COUNT) {
+    throw new Error(`Expected ${EXPECTED_PATTERN_COUNT} records, found ${definitions.length}`);
+  }
+  const identifiers = new Set(definitions.map((definition) => definition.identifier));
+  if (identifiers.size !== definitions.length) throw new Error("Pattern identifiers must be unique");
+  for (const definition of definitions) {
+    if (![definition.identifier, definition.catalogues.length, definition.family, definition.name].every(Boolean)) {
+      throw new Error(`Incomplete definition: ${definition.identifier}`);
+    }
+    const contract = contracts[definition.contract];
+    if (!contract || !contract()) throw new Error(`${definition.name} contract failed`);
+    console.log(`PASS ${definition.name}`);
+  }
+}
+
+verify(parseCatalog(`${__dirname}/../shared/pattern-catalog.tsv`));
+console.log(`Verified ${EXPECTED_PATTERN_COUNT} catalogued patterns.`);

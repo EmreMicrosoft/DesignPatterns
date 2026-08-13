@@ -1,0 +1,39 @@
+# Build outputs and dependency caches
+**/[Bb]in/
+**/[Oo]bj/
+**/target/
+**/node_modules/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+
+# IDE and operating-system files
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# Native build products
+C++/bin/
+**/*.o
+**/*.obj
+**/*.exe
+
+# Local reference material. These third-party source trees remain on disk for
+# comparison only and are intentionally excluded from this independently
+# authored catalogue.
+/C#/
+/C++/
+/Go/
+/Java/
+/PHP/
+/Python/
+/Ruby/
+/Rust/
+/Swift/
+/TypeScript/
+/THIRD_PARTY_NOTICES.md
+/extensions/

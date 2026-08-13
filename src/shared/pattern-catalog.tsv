@@ -1,0 +1,239 @@
+# id|catalogues|family|name|contract
+# This is an independently authored coverage manifest. A record can be present
+# in more than one source catalogue; aliases remain distinct only when their
+# problem statement differs.
+abstract-factory|GoF|creational|Abstract Factory|composition
+builder|GoF|creational|Builder|composition
+factory-method|GoF|creational|Factory Method|composition
+prototype|GoF|creational|Prototype|composition
+singleton|GoF|creational|Singleton|state
+adapter|GoF|structural|Adapter|mapping
+bridge|GoF|structural|Bridge|composition
+composite|GoF|structural|Composite|composition
+decorator|GoF|structural|Decorator|composition
+facade|GoF|structural|Facade|boundary
+flyweight|GoF|structural|Flyweight|state
+proxy|GoF|structural|Proxy|boundary
+chain-of-responsibility|GoF|behavioral|Chain of Responsibility|routing
+command|GoF|behavioral|Command|messaging
+interpreter|GoF|behavioral|Interpreter|mapping
+iterator|GoF|behavioral|Iterator|state
+mediator|GoF|behavioral|Mediator|messaging
+memento|GoF|behavioral|Memento|state
+observer|GoF|behavioral|Observer|messaging
+state|GoF|behavioral|State|state
+strategy|GoF|behavioral|Strategy|composition
+template-method|GoF|behavioral|Template Method|composition
+visitor|GoF|behavioral|Visitor|mapping
+repository|PoEAA|enterprise|Repository|persistence
+unit-of-work|PoEAA|enterprise|Unit of Work|persistence
+specification|Supplemental|domain|Specification|mapping
+cqrs|Microservices;Azure|distributed|CQRS|persistence
+event-sourcing|Microservices;Azure|distributed|Event Sourcing|persistence
+saga|Microservices;Azure|distributed|Saga|resilience
+retry|Azure|resilience|Retry|resilience
+circuit-breaker|Microservices;Azure|resilience|Circuit Breaker|resilience
+cache-aside|Azure|resilience|Cache-Aside|persistence
+transactional-outbox|Microservices|distributed|Transactional Outbox|messaging
+idempotent-consumer|Microservices|messaging|Idempotent Consumer|messaging
+pipes-and-filters|EIP;Azure|messaging|Pipes and Filters|composition
+content-based-router|EIP|messaging|Content-Based Router|routing
+dead-letter-channel|EIP|messaging|Dead Letter Channel|messaging
+health-check|Supplemental|operations|Health Check|observability
+transaction-script|PoEAA|enterprise|Transaction Script|boundary
+domain-model|PoEAA|enterprise|Domain Model|composition
+table-module|PoEAA|enterprise|Table Module|boundary
+service-layer|PoEAA|enterprise|Service Layer|boundary
+table-data-gateway|PoEAA|persistence|Table Data Gateway|persistence
+row-data-gateway|PoEAA|persistence|Row Data Gateway|persistence
+active-record|PoEAA|persistence|Active Record|persistence
+data-mapper|PoEAA|persistence|Data Mapper|mapping
+identity-map|PoEAA|persistence|Identity Map|state
+lazy-load|PoEAA|persistence|Lazy Load|persistence
+identity-field|PoEAA|persistence|Identity Field|persistence
+foreign-key-mapping|PoEAA|persistence|Foreign Key Mapping|mapping
+association-table-mapping|PoEAA|persistence|Association Table Mapping|mapping
+dependent-mapping|PoEAA|persistence|Dependent Mapping|mapping
+embedded-value|PoEAA|persistence|Embedded Value|mapping
+serialized-lob|PoEAA|persistence|Serialized LOB|persistence
+single-table-inheritance|PoEAA|persistence|Single Table Inheritance|mapping
+class-table-inheritance|PoEAA|persistence|Class Table Inheritance|mapping
+concrete-table-inheritance|PoEAA|persistence|Concrete Table Inheritance|mapping
+metadata-mapping|PoEAA|persistence|Metadata Mapping|mapping
+query-object|PoEAA|persistence|Query Object|persistence
+model-view-controller|PoEAA|presentation|Model View Controller|boundary
+page-controller|PoEAA|presentation|Page Controller|routing
+front-controller|PoEAA|presentation|Front Controller|routing
+template-view|PoEAA|presentation|Template View|mapping
+transform-view|PoEAA|presentation|Transform View|mapping
+two-step-view|PoEAA|presentation|Two Step View|composition
+application-controller|PoEAA|presentation|Application Controller|routing
+remote-facade|PoEAA|distribution|Remote Facade|boundary
+data-transfer-object|PoEAA|distribution|Data Transfer Object|mapping
+optimistic-offline-lock|PoEAA|concurrency|Optimistic Offline Lock|concurrency
+pessimistic-offline-lock|PoEAA|concurrency|Pessimistic Offline Lock|concurrency
+coarse-grained-lock|PoEAA|concurrency|Coarse-Grained Lock|concurrency
+implicit-lock|PoEAA|concurrency|Implicit Lock|concurrency
+client-session-state|PoEAA|state|Client Session State|state
+server-session-state|PoEAA|state|Server Session State|state
+database-session-state|PoEAA|state|Database Session State|persistence
+gateway|PoEAA|integration|Gateway|boundary
+service-stub|PoEAA|testing|Service Stub|boundary
+record-set|PoEAA|persistence|Record Set|persistence
+mapper|PoEAA|integration|Mapper|mapping
+layer-supertype|PoEAA|structure|Layer Supertype|composition
+separated-interface|PoEAA|structure|Separated Interface|boundary
+registry|PoEAA|structure|Registry|state
+value-object|PoEAA|domain|Value Object|state
+money|PoEAA|domain|Money|state
+special-case|PoEAA|domain|Special Case|composition
+plugin|PoEAA|structure|Plugin|composition
+message|EIP|messaging|Message|messaging
+command-message|EIP|messaging|Command Message|messaging
+document-message|EIP|messaging|Document Message|messaging
+event-message|EIP|messaging|Event Message|messaging
+request-reply|EIP|messaging|Request-Reply|messaging
+return-address|EIP|messaging|Return Address|routing
+correlation-identifier|EIP|messaging|Correlation Identifier|messaging
+message-sequence|EIP|messaging|Message Sequence|ordering
+message-expiration|EIP|messaging|Message Expiration|resilience
+format-indicator|EIP|messaging|Format Indicator|mapping
+message-router|EIP|messaging|Message Router|routing
+message-filter|EIP|messaging|Message Filter|routing
+dynamic-router|EIP|messaging|Dynamic Router|routing
+recipient-list|EIP|messaging|Recipient List|routing
+splitter|EIP|messaging|Splitter|composition
+aggregator|EIP|messaging|Aggregator|composition
+resequencer|EIP|messaging|Resequencer|ordering
+composed-message-processor|EIP|messaging|Composed Message Processor|composition
+scatter-gather|EIP|messaging|Scatter-Gather|composition
+routing-slip|EIP|messaging|Routing Slip|routing
+process-manager|EIP|messaging|Process Manager|state
+message-broker|EIP|messaging|Message Broker|routing
+message-translator|EIP|messaging|Message Translator|mapping
+envelope-wrapper|EIP|messaging|Envelope Wrapper|mapping
+content-enricher|EIP|messaging|Content Enricher|mapping
+content-filter|EIP|messaging|Content Filter|mapping
+claim-check|EIP;Azure|messaging|Claim Check|persistence
+normalizer|EIP|messaging|Normalizer|mapping
+canonical-data-model|EIP|messaging|Canonical Data Model|mapping
+message-endpoint|EIP|messaging|Message Endpoint|boundary
+messaging-gateway|EIP|messaging|Messaging Gateway|boundary
+messaging-mapper|EIP|messaging|Messaging Mapper|mapping
+transactional-client|EIP|messaging|Transactional Client|persistence
+polling-consumer|EIP|messaging|Polling Consumer|messaging
+event-driven-consumer|EIP|messaging|Event-Driven Consumer|messaging
+competing-consumers|EIP;Azure|messaging|Competing Consumers|concurrency
+message-dispatcher|EIP|messaging|Message Dispatcher|routing
+selective-consumer|EIP|messaging|Selective Consumer|routing
+durable-subscriber|EIP|messaging|Durable Subscriber|persistence
+idempotent-receiver|EIP|messaging|Idempotent Receiver|messaging
+service-activator|EIP|messaging|Service Activator|boundary
+message-channel|EIP|messaging|Message Channel|messaging
+point-to-point-channel|EIP|messaging|Point-to-Point Channel|messaging
+publish-subscribe-channel|EIP|messaging|Publish-Subscribe Channel|messaging
+datatype-channel|EIP|messaging|Datatype Channel|mapping
+invalid-message-channel|EIP|messaging|Invalid Message Channel|messaging
+guaranteed-delivery|EIP|messaging|Guaranteed Delivery|resilience
+channel-adapter|EIP|messaging|Channel Adapter|boundary
+messaging-bridge|EIP;Azure|messaging|Messaging Bridge|boundary
+message-bus|EIP|messaging|Message Bus|messaging
+control-bus|EIP|operations|Control Bus|messaging
+detour|EIP|messaging|Detour|routing
+wire-tap|EIP|operations|Wire Tap|observability
+message-history|EIP|operations|Message History|observability
+message-store|EIP|operations|Message Store|persistence
+smart-proxy|EIP|messaging|Smart Proxy|boundary
+test-message|EIP|testing|Test Message|messaging
+channel-purger|EIP|operations|Channel Purger|messaging
+monolithic-architecture|Microservices|architecture|Monolithic Architecture|composition
+microservice-architecture|Microservices|architecture|Microservice Architecture|composition
+decompose-by-business-capability|Microservices|architecture|Decompose by Business Capability|composition
+decompose-by-subdomain|Microservices|architecture|Decompose by Subdomain|composition
+self-contained-service|Microservices|architecture|Self-Contained Service|boundary
+service-per-team|Microservices|architecture|Service per Team|composition
+strangler-application|Microservices;Azure|migration|Strangler Application|composition
+anti-corruption-layer|Microservices;Azure|integration|Anti-Corruption Layer|boundary
+database-per-service|Microservices|data|Database per Service|persistence
+shared-database|EIP;Microservices|data|Shared Database|persistence
+command-side-replica|Microservices|data|Command-Side Replica|persistence
+api-composition|Microservices|api|API Composition|composition
+domain-event|Microservices|domain|Domain Event|messaging
+transaction-log-tailing|Microservices|messaging|Transaction Log Tailing|messaging
+polling-publisher|Microservices|messaging|Polling Publisher|messaging
+consumer-driven-contract-test|Microservices|testing|Consumer-Driven Contract Test|boundary
+consumer-side-contract-test|Microservices|testing|Consumer-Side Contract Test|boundary
+service-component-test|Microservices|testing|Service Component Test|boundary
+multiple-service-instances-per-host|Microservices|deployment|Multiple Service Instances per Host|deployment
+service-instance-per-host|Microservices|deployment|Service Instance per Host|deployment
+service-instance-per-vm|Microservices|deployment|Service Instance per VM|deployment
+service-instance-per-container|Microservices|deployment|Service Instance per Container|deployment
+serverless-deployment|Microservices|deployment|Serverless Deployment|deployment
+service-deployment-platform|Microservices|deployment|Service Deployment Platform|deployment
+microservice-chassis|Microservices|architecture|Microservice Chassis|composition
+externalized-configuration|Microservices|operations|Externalized Configuration|boundary
+service-template|Microservices|architecture|Service Template|composition
+remote-procedure-invocation|EIP;Microservices|communication|Remote Procedure Invocation|messaging
+messaging|EIP;Microservices|communication|Messaging|messaging
+domain-specific-protocol|Microservices|communication|Domain-Specific Protocol|mapping
+api-gateway|Microservices|api|API Gateway|boundary
+backend-for-frontend|Microservices;Azure|api|Backend for Frontend|boundary
+client-side-discovery|Microservices|discovery|Client-Side Discovery|routing
+server-side-discovery|Microservices|discovery|Server-Side Discovery|routing
+service-registry|Microservices|discovery|Service Registry|state
+self-registration|Microservices|discovery|Self Registration|state
+third-party-registration|Microservices|discovery|Third-Party Registration|state
+access-token|Microservices|security|Access Token|security
+log-aggregation|Microservices|observability|Log Aggregation|observability
+application-metrics|Microservices|observability|Application Metrics|observability
+audit-logging|Microservices|observability|Audit Logging|observability
+ambassador|Azure|networking|Ambassador|boundary
+asynchronous-request-reply|Azure|messaging|Asynchronous Request-Reply|messaging
+bulkhead|Azure|resilience|Bulkhead|resilience
+choreography|Azure|distributed|Choreography|messaging
+compensating-transaction|Azure|distributed|Compensating Transaction|resilience
+compute-resource-consolidation|Azure|deployment|Compute Resource Consolidation|deployment
+deployment-stamps|Azure|deployment|Deployment Stamps|deployment
+external-configuration-store|Azure|operations|External Configuration Store|boundary
+federated-identity|Azure|security|Federated Identity|security
+gatekeeper|Azure|security|Gatekeeper|security
+gateway-aggregation|Azure|api|Gateway Aggregation|boundary
+gateway-offloading|Azure|api|Gateway Offloading|boundary
+gateway-routing|Azure|api|Gateway Routing|routing
+geode|Azure|deployment|Geode|deployment
+health-endpoint-monitoring|Azure|observability|Health Endpoint Monitoring|observability
+index-table|Azure|persistence|Index Table|persistence
+leader-election|Azure|concurrency|Leader Election|concurrency
+materialized-view|Azure|persistence|Materialized View|persistence
+priority-queue|Azure|messaging|Priority Queue|ordering
+publisher-subscriber|Azure|messaging|Publisher-Subscriber|messaging
+quarantine|Azure|security|Quarantine|security
+queue-based-load-leveling|Azure|resilience|Queue-Based Load Leveling|resilience
+rate-limiting|Azure|resilience|Rate Limiting|resilience
+scheduler-agent-supervisor|Azure|distributed|Scheduler Agent Supervisor|concurrency
+sequential-convoy|Azure|messaging|Sequential Convoy|ordering
+sharding|Azure|persistence|Sharding|persistence
+sidecar|Azure|deployment|Sidecar|boundary
+static-content-hosting|Azure|deployment|Static Content Hosting|deployment
+throttling|Azure|resilience|Throttling|resilience
+valet-key|Azure|security|Valet Key|security
+file-transfer|EIP|integration|File Transfer|boundary
+aggregate|Supplemental|domain|Aggregate|boundary
+entity|Supplemental|domain|Entity|state
+bounded-context|Supplemental|domain|Bounded Context|boundary
+hexagonal-architecture|Supplemental|architecture|Hexagonal Architecture|boundary
+clean-architecture|Supplemental|architecture|Clean Architecture|boundary
+onion-architecture|Supplemental|architecture|Onion Architecture|boundary
+microkernel|Supplemental|architecture|Microkernel|composition
+layered-architecture|Supplemental|architecture|Layered Architecture|boundary
+event-driven-architecture|Supplemental|architecture|Event-Driven Architecture|messaging
+actor-model|Supplemental|concurrency|Actor Model|concurrency
+active-object|Supplemental|concurrency|Active Object|concurrency
+reactor|Supplemental|concurrency|Reactor|messaging
+proactor|Supplemental|concurrency|Proactor|messaging
+half-sync-half-async|Supplemental|concurrency|Half-Sync/Half-Async|concurrency
+leader-followers|Supplemental|concurrency|Leader-Followers|concurrency
+monitor-object|Supplemental|concurrency|Monitor Object|concurrency
+thread-pool|Supplemental|concurrency|Thread Pool|concurrency
+future-promise|Supplemental|concurrency|Future/Promise|concurrency
+read-write-lock|Supplemental|concurrency|Read-Write Lock|concurrency

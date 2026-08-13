@@ -2,7 +2,7 @@
 
 > [Default README](README.md) | [Türkçe](README_TR.md) | [MIT License](LICENSE)
 
-An independently authored, executable catalogue of 248 design-pattern records.
+An independently authored, executable catalogue of 249 design-pattern records.
 It covers GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure
 Cloud Design Patterns, the complete POSA Volume 1 catalogue, and selected DDD, architecture,
 and concurrency patterns.
@@ -16,8 +16,8 @@ and concurrency patterns.
   single source of truth for pattern identity, source catalogue, family, and
   executable concern.
 
-The latest addition is POSA Volume 2's Component Configurator pattern: declared
-configuration selects a factory and starts the requested component.
+The latest addition is POSA Volume 2's Interceptor pattern: it records an audit
+action before delegating the enriched request to the next handler.
 
 ## Verify
 
@@ -31,7 +31,7 @@ optional locally and is validated in GitHub Actions.
 ## Interactive web explorer
 
 [`web/index.html`](web/index.html) is a dependency-free, bilingual explorer for
-all 248 records. Search or filter the cards, switch between English and
+all 249 records. Search or filter the cards, switch between English and
 Turkish, then select **Run learning scenario** to display the input, computed
 result, and a short three-step data-flow explanation. The browser model is a
 small teaching simulation of each record's executable concern, not a production

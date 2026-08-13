@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 248;
+const EXPECTED_PATTERN_COUNT = 249;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -110,6 +110,11 @@ function componentConfiguratorContract() {
   return new ComponentConfigurator(new Map([["cache", Cache]])).configure("cache") === "cache:ready";
 }
 
+function interceptorContract() {
+  const auditInterceptor = (request, nextHandler) => { request.audit = "recorded"; return nextHandler(request); };
+  return auditInterceptor({ operation: "save" }, (request) => request.audit) === "recorded";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -137,6 +142,7 @@ const contracts = Object.freeze({
   "counted-pointer": countedPointerContract,
   "wrapper-facade": wrapperFacadeContract,
   "component-configurator": componentConfiguratorContract,
+  interceptor: interceptorContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

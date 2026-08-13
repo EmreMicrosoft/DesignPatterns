@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 248
+EXPECTED_PATTERN_COUNT = 249
 
 
 @dataclass(frozen=True)
@@ -172,6 +172,13 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return ComponentConfigurator({"cache": Cache}).configure("cache") == "cache:ready"
 
+    def interceptor() -> bool:
+        def audit_interceptor(request: dict[str, str], next_handler: Callable[[dict[str, str]], str]) -> str:
+            request["audit"] = "recorded"
+            return next_handler(request)
+
+        return audit_interceptor({"operation": "save"}, lambda request: request["audit"]) == "recorded"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -187,6 +194,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "counted-pointer": counted_pointer,
         "wrapper-facade": wrapper_facade,
         "component-configurator": component_configurator,
+        "interceptor": interceptor,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

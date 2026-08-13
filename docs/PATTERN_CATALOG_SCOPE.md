@@ -34,7 +34,7 @@ with the already catalogued Layers, Pipes and Filters, Model-View-Controller,
 Microkernel, Proxy and Publisher-Subscriber patterns, this completes the POSA
 Volume 1 pattern list.
 
-The next audited extension is POSA Volume 2. Wrapper Facade hides low-level
+The audited POSA Volume 2 extension is complete. Wrapper Facade hides low-level
 socket setup behind a focused connection API, while Component Configurator
 selects and starts a declared component through its factory. Interceptor adds
 an audit action before a request reaches its next handler. Extension Interface
@@ -52,6 +52,10 @@ Exception Tracking records an error with the service context needed to investiga
 Log Deployments and Changes records releases so behavior can be correlated with change.
 Server-Side Page Fragment Composition joins independently owned fragments into one page.
 Client-Side UI Composition joins independently owned UI fragments in the browser.
+
+The audited Microservices.io extension is also complete: Distributed Tracing,
+Exception Tracking, Log Deployments and Changes, Server-Side Page Fragment
+Composition and Client-Side UI Composition are now executable records.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

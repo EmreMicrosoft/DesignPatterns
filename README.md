@@ -18,6 +18,7 @@ small learning references, not copy-paste production templates.
 | Microservices.io | Complete listed microservice pattern language |
 | Azure Cloud Design Patterns | Complete listed cloud pattern catalogue |
 | POSA Volume 1 | All 17 architectural patterns, design patterns and idioms |
+| POSA Volume 2 | All 17 concurrent and networked object patterns |
 | Supplemental | 19 common DDD, architecture and concurrency patterns |
 
 ## Languages

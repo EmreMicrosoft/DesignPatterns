@@ -234,6 +234,7 @@ component-configurator|POSA2|architecture|Component Configurator|component-confi
 interceptor|POSA2|architecture|Interceptor|interceptor
 extension-interface|POSA2|architecture|Extension Interface|extension-interface
 asynchronous-completion-token|POSA2|architecture|Asynchronous Completion Token|asynchronous-completion-token
+acceptor-connector|POSA2|architecture|Acceptor-Connector|acceptor-connector
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

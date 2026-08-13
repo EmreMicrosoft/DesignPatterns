@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 251;
+const EXPECTED_PATTERN_COUNT = 252;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -146,6 +146,16 @@ function asynchronousCompletionTokenContract(): boolean {
   return token.requestId === "run-42" && token.result === "saved";
 }
 
+function acceptorConnectorContract(): boolean {
+  class Acceptor { accept(peer: string): string { return `connected:${peer}`; } }
+  class Connector {
+    private readonly acceptor: Acceptor;
+    constructor(acceptor: Acceptor) { this.acceptor = acceptor; }
+    connect(peer: string): string { return this.acceptor.accept(peer); }
+  }
+  return new Connector(new Acceptor()).connect("catalogue-client") === "connected:catalogue-client";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -176,6 +186,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   interceptor: interceptorContract,
   "extension-interface": extensionInterfaceContract,
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
+  "acceptor-connector": acceptorConnectorContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

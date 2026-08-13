@@ -5,10 +5,15 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 
 & (Join-Path $PSScriptRoot 'verify-dotnet.ps1')
+if ($LASTEXITCODE -ne 0) { throw 'C# verification failed.' }
 python (Join-Path $root 'src/python/catalog.py')
+if ($LASTEXITCODE -ne 0) { throw 'Python catalogue verification failed.' }
 node (Join-Path $root 'src/javascript/catalog.js')
+if ($LASTEXITCODE -ne 0) { throw 'JavaScript catalogue verification failed.' }
 node (Join-Path $root 'src/typescript/catalog.ts')
+if ($LASTEXITCODE -ne 0) { throw 'TypeScript catalogue verification failed.' }
 node --test (Join-Path $root 'web/catalogue-model.test.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Web catalogue verification failed.' }
 
 $cppCompiler = Get-Command g++, clang++ -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($null -eq $cppCompiler) {

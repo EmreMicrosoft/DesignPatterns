@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 251;
+const EXPECTED_PATTERN_COUNT = 252;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -105,7 +105,7 @@ function componentConfiguratorContract() {
   class Cache { start() { return "cache:ready"; } }
   class ComponentConfigurator {
     constructor(factories) { this.factories = factories; }
-    configure(name) { return new this.factories.get(name)().start(); }
+    configure(name) { const Factory = this.factories.get(name); return new Factory().start(); }
   }
   return new ComponentConfigurator(new Map([["cache", Cache]])).configure("cache") === "cache:ready";
 }
@@ -126,6 +126,12 @@ function asynchronousCompletionTokenContract() {
   const token = new CompletionToken("run-42");
   token.complete("saved");
   return token.requestId === "run-42" && token.result === "saved";
+}
+
+function acceptorConnectorContract() {
+  class Acceptor { accept(peer) { return `connected:${peer}`; } }
+  class Connector { constructor(acceptor) { this.acceptor = acceptor; } connect(peer) { return this.acceptor.accept(peer); } }
+  return new Connector(new Acceptor()).connect("catalogue-client") === "connected:catalogue-client";
 }
 
 function parseCatalog(path) {
@@ -158,6 +164,7 @@ const contracts = Object.freeze({
   interceptor: interceptorContract,
   "extension-interface": extensionInterfaceContract,
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
+  "acceptor-connector": acceptorConnectorContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

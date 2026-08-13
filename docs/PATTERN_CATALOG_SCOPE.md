@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 251 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 252 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -40,7 +40,8 @@ selects and starts a declared component through its factory. Interceptor adds
 an audit action before a request reaches its next handler. Extension Interface
 exposes an optional diagnostics capability without changing the base interface.
 Asynchronous Completion Token associates a later result with the request that
-started the work.
+started the work. Acceptor-Connector separates peer connection setup from the
+work that follows.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

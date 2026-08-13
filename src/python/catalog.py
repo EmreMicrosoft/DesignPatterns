@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 251
+EXPECTED_PATTERN_COUNT = 252
 
 
 @dataclass(frozen=True)
@@ -204,6 +204,20 @@ def contracts() -> dict[str, Callable[[], bool]]:
         token.complete("saved")
         return token.request_id == "run-42" and token.result == "saved"
 
+    def acceptor_connector() -> bool:
+        class Acceptor:
+            def accept(self, peer: str) -> str:
+                return f"connected:{peer}"
+
+        class Connector:
+            def __init__(self, acceptor: Acceptor) -> None:
+                self._acceptor = acceptor
+
+            def connect(self, peer: str) -> str:
+                return self._acceptor.accept(peer)
+
+        return Connector(Acceptor()).connect("catalogue-client") == "connected:catalogue-client"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -222,6 +236,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "interceptor": interceptor,
         "extension-interface": extension_interface,
         "asynchronous-completion-token": asynchronous_completion_token,
+        "acceptor-connector": acceptor_connector,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

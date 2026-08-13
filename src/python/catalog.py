@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock, local
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 257
+EXPECTED_PATTERN_COUNT = 258
 
 
 @dataclass(frozen=True)
@@ -313,6 +313,18 @@ def contracts() -> dict[str, Callable[[], bool]]:
         context.set_request_id("run-42")
         return context.request_id() == "run-42"
 
+    def distributed_tracing() -> bool:
+        class Trace:
+            def __init__(self, trace_id: str) -> None:
+                self.trace_id = trace_id
+                self.spans: list[str] = []
+            def record(self, service: str) -> None:
+                self.spans.append(f"{self.trace_id}:{service}")
+        trace = Trace("trace-42")
+        trace.record("catalogue-api")
+        trace.record("pricing")
+        return trace.spans == ["trace-42:catalogue-api", "trace-42:pricing"]
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -337,6 +349,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "thread-safe-interface": thread_safe_interface,
         "double-checked-locking": double_checked_locking,
         "thread-specific-storage": thread_specific_storage,
+        "distributed-tracing": distributed_tracing,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

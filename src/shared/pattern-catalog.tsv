@@ -240,6 +240,7 @@ strategized-locking|POSA2|concurrency|Strategized Locking|strategized-locking
 thread-safe-interface|POSA2|concurrency|Thread-Safe Interface|thread-safe-interface
 double-checked-locking|POSA2|concurrency|Double-Checked Locking|double-checked-locking
 thread-specific-storage|POSA2|concurrency|Thread-Specific Storage|thread-specific-storage
+distributed-tracing|Microservices|observability|Distributed Tracing|distributed-tracing
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

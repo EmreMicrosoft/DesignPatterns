@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 257;
+const EXPECTED_PATTERN_COUNT = 258;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -237,6 +237,13 @@ function threadSpecificStorageContract(): boolean {
   return contexts.requestIdFor("worker-1") === "run-42" && contexts.requestIdFor("worker-2") === undefined;
 }
 
+function distributedTracingContract(): boolean {
+  class Trace { readonly spans: string[] = []; readonly traceId: string; constructor(traceId: string) { this.traceId = traceId; } record(service: string): void { this.spans.push(`${this.traceId}:${service}`); } }
+  const trace = new Trace("trace-42");
+  trace.record("catalogue-api"); trace.record("pricing");
+  return trace.spans.join(",") === "trace-42:catalogue-api,trace-42:pricing";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -273,6 +280,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "thread-safe-interface": threadSafeInterfaceContract,
   "double-checked-locking": doubleCheckedLockingContract,
   "thread-specific-storage": threadSpecificStorageContract,
+  "distributed-tracing": distributedTracingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

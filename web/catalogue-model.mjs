@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 257;
+export const EXPECTED_PATTERN_COUNT = 258;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -56,6 +56,7 @@ const scenarios = {
   "thread-safe-interface": scenario(text("make each public inventory operation safe to call", "her açık envanter işlemini güvenle çağrılabilir yapmak"), text("add catalogue", "katalog ekle"), [text("A caller invokes the public add operation.", "Çağıran taraf açık add işlemini çağırır."), text("The interface synchronizes access to its private state.", "Arayüz özel durumuna erişimi eşzamanlar."), text("The caller reads the consistent item count.", "Çağıran taraf tutarlı öğe sayısını okur.")], () => "count:1"),
   "double-checked-locking": scenario(text("create a shared catalogue lazily only once", "paylaşılan kataloğu yalnızca bir kez tembel olarak oluşturmak"), text("get catalogue", "kataloğu al"), [text("The first check avoids locking after initialization.", "İlk kontrol başlatma sonrasında kilitlemeyi önler."), text("A missing instance is checked again while protected.", "Eksik örnek koruma altındayken yeniden kontrol edilir."), text("Exactly one ready catalogue instance is returned.", "Tam olarak bir hazır katalog örneği döndürülür.")], () => "ready; creations:1"),
   "thread-specific-storage": scenario(text("keep request context isolated per worker", "istek bağlamını her worker için yalıtılmış tutmak"), text("worker-1 / run-42", "worker-1 / run-42"), [text("A worker stores its request id in its local slot.", "Bir worker istek kimliğini yerel yuvasına koyar."), text("The storage resolves data using that worker's execution context.", "Depolama veriyi o worker'ın yürütme bağlamıyla çözer."), text("Another worker has no access to that local value.", "Başka bir worker bu yerel değere erişemez.")], () => "worker-1:run-42; worker-2:empty"),
+  "distributed-tracing": scenario(text("follow one request across service boundaries", "tek isteği servis sınırları boyunca izlemek"), text("trace-42", "trace-42"), [text("The API starts a trace with one correlation id.", "API tek bir ilişkilendirme kimliğiyle iz başlatır."), text("Each downstream service records a span with that id.", "Her alt servis bu kimlikle bir span kaydeder."), text("The collected spans reconstruct the request path.", "Toplanan span'lar istek yolunu yeniden kurar.")], () => "trace-42: catalogue-api → pricing"),
 };
 
 export function parseCatalogue(tsv) {

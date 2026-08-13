@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock, local
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 259
+EXPECTED_PATTERN_COUNT = 260
 
 
 @dataclass(frozen=True)
@@ -334,6 +334,13 @@ def contracts() -> dict[str, Callable[[], bool]]:
         except ValueError as error: tracker.record("catalogue-api", error)
         return tracker.reports == [{"service": "catalogue-api", "error": "catalogue unavailable"}]
 
+    def log_deployments_and_changes() -> bool:
+        class ChangeLog:
+            def __init__(self) -> None: self.entries: list[str] = []
+            def record_deployment(self, version: str) -> None: self.entries.append(f"deployed:{version}")
+        log = ChangeLog(); log.record_deployment("2026.08.13")
+        return log.entries == ["deployed:2026.08.13"]
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -360,6 +367,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "thread-specific-storage": thread_specific_storage,
         "distributed-tracing": distributed_tracing,
         "exception-tracking": exception_tracking,
+        "log-deployments-and-changes": log_deployments_and_changes,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

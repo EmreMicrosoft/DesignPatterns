@@ -242,6 +242,7 @@ double-checked-locking|POSA2|concurrency|Double-Checked Locking|double-checked-l
 thread-specific-storage|POSA2|concurrency|Thread-Specific Storage|thread-specific-storage
 distributed-tracing|Microservices|observability|Distributed Tracing|distributed-tracing
 exception-tracking|Microservices|observability|Exception Tracking|exception-tracking
+log-deployments-and-changes|Microservices|observability|Log Deployments and Changes|log-deployments-and-changes
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

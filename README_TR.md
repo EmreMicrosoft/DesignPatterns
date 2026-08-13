@@ -4,7 +4,7 @@
 
 GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure Cloud
 Design Patterns, eksiksiz POSA Volume 1 kataloğu ve seçilmiş DDD, mimari ve
- eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 259
+ eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 260
 kayıtlı katalogdur.
 
 ## Diller ve mimari
@@ -16,8 +16,8 @@ kayıtlı katalogdur.
   kimliği, kaynak kataloğu, ailesi ve çalıştırılabilir concern için tek doğruluk
   kaynağıdır.
 
-En son eklenen Microservices.io Exception Tracking desenidir: bir izleyici,
-her hatayı inceleme için gereken servis bağlamıyla kaydeder.
+En son eklenen Microservices.io Log Deployments and Changes desenidir: dağıtım
+sürümleri, davranışı değişiklikle ilişkilendirmek için kaydedilir.
 
 ## Doğrulama
 
@@ -30,7 +30,7 @@ yerelde isteğe bağlıdır; GitHub Actions üzerinde doğrulanır.
 
 ## Etkileşimli web gezgini
 
-[`web/index.html`](web/index.html), 259 kaydın tamamı için bağımlılıksız ve iki
+[`web/index.html`](web/index.html), 260 kaydın tamamı için bağımlılıksız ve iki
 dilli bir gezgindir. Kartları arayın veya filtreleyin, İngilizce ile Türkçe
 arasında geçiş yapın; ardından **Öğrenme senaryosunu çalıştır** düğmesiyle
 girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Tarayıcı

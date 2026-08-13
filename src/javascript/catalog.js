@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 259;
+const EXPECTED_PATTERN_COUNT = 260;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -225,6 +225,7 @@ function exceptionTrackingContract() {
   try { throw new Error("catalogue unavailable"); } catch (error) { tracker.record("catalogue-api", error); }
   return JSON.stringify(tracker.reports) === '[{"service":"catalogue-api","error":"catalogue unavailable"}]';
 }
+function logDeploymentsAndChangesContract() { class ChangeLog { constructor() { this.entries = []; } recordDeployment(version) { this.entries.push(`deployed:${version}`); } } const log = new ChangeLog(); log.recordDeployment("2026.08.13"); return log.entries.join(",") === "deployed:2026.08.13"; }
 
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
@@ -264,6 +265,7 @@ const contracts = Object.freeze({
   "thread-specific-storage": threadSpecificStorageContract,
   "distributed-tracing": distributedTracingContract,
   "exception-tracking": exceptionTrackingContract,
+  "log-deployments-and-changes": logDeploymentsAndChangesContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

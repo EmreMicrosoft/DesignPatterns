@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 259;
+export const EXPECTED_PATTERN_COUNT = 260;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -58,6 +58,7 @@ const scenarios = {
   "thread-specific-storage": scenario(text("keep request context isolated per worker", "istek bağlamını her worker için yalıtılmış tutmak"), text("worker-1 / run-42", "worker-1 / run-42"), [text("A worker stores its request id in its local slot.", "Bir worker istek kimliğini yerel yuvasına koyar."), text("The storage resolves data using that worker's execution context.", "Depolama veriyi o worker'ın yürütme bağlamıyla çözer."), text("Another worker has no access to that local value.", "Başka bir worker bu yerel değere erişemez.")], () => "worker-1:run-42; worker-2:empty"),
   "distributed-tracing": scenario(text("follow one request across service boundaries", "tek isteği servis sınırları boyunca izlemek"), text("trace-42", "trace-42"), [text("The API starts a trace with one correlation id.", "API tek bir ilişkilendirme kimliğiyle iz başlatır."), text("Each downstream service records a span with that id.", "Her alt servis bu kimlikle bir span kaydeder."), text("The collected spans reconstruct the request path.", "Toplanan span'lar istek yolunu yeniden kurar.")], () => "trace-42: catalogue-api → pricing"),
   "exception-tracking": scenario(text("capture errors with service context", "hataları servis bağlamıyla yakalamak"), text("catalogue unavailable", "katalog kullanılamıyor"), [text("A service catches an unexpected failure.", "Bir servis beklenmeyen hatayı yakalar."), text("The tracker records the error and the reporting service.", "İzleyici hatayı ve bildiren servisi kaydeder."), text("Operators can group and investigate the report.", "Operatörler bildirimi gruplayıp inceleyebilir.")], () => "catalogue-api: catalogue unavailable"),
+  "log-deployments-and-changes": scenario(text("make runtime changes visible beside service events", "çalışma zamanı değişikliklerini servis olaylarının yanında görünür kılmak"), text("deploy 2026.08.13", "2026.08.13 dağıtımı"), [text("A release is deployed to the service.", "Bir sürüm servise dağıtılır."), text("The change log records the deployment version.", "Değişiklik günlüğü dağıtım sürümünü kaydeder."), text("Operators correlate new behavior with that change.", "Operatörler yeni davranışı bu değişiklikle ilişkilendirir.")], () => "deployed:2026.08.13"),
 };
 
 export function parseCatalogue(tsv) {

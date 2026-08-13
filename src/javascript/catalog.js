@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 237;
+const EXPECTED_PATTERN_COUNT = 238;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -22,6 +22,14 @@ function brokerContract() {
   return request("pricing", "42") === "quote:42";
 }
 
+function pacContract() {
+  const abstraction = { selected: "none" };
+  const control = (action) => { abstraction.selected = action.replace("select:", ""); };
+  const presentation = () => `selected:${abstraction.selected}`;
+  control("select:report");
+  return presentation() === "selected:report";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -38,6 +46,7 @@ const contracts = Object.freeze({
   boundary: () => new Map([["request", "accepted"]]).get("request") === "accepted",
   blackboard: blackboardContract,
   broker: brokerContract,
+  pac: pacContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

@@ -220,6 +220,7 @@ valet-key|Azure|security|Valet Key|security
 file-transfer|EIP|integration|File Transfer|boundary
 blackboard|POSA1|architecture|Blackboard|blackboard
 broker|POSA1|architecture|Broker|broker
+presentation-abstraction-control|POSA1|architecture|Presentation-Abstraction-Control|pac
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 237
+EXPECTED_PATTERN_COUNT = 238
 
 
 @dataclass(frozen=True)
@@ -54,10 +54,23 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return request("pricing", "42") == "quote:42"
 
+    def pac() -> bool:
+        abstraction = {"selected": "none"}
+
+        def control(action: str) -> None:
+            abstraction["selected"] = action.removeprefix("select:")
+
+        def presentation() -> str:
+            return f"selected:{abstraction['selected']}"
+
+        control("select:report")
+        return presentation() == "selected:report"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
         "broker": broker,
+        "pac": pac,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

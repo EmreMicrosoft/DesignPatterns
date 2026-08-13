@@ -13,7 +13,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 250;
+constexpr std::size_t ExpectedPatternCount = 251;
 
 struct PatternDefinition {
     std::string identifier;
@@ -70,6 +70,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"component-configurator", [] { struct Cache { std::string start() const { return "cache:ready"; } }; const std::unordered_map<std::string, std::function<Cache()>> factories{{"cache", [] { return Cache{}; }}}; const auto configure = [&](const std::string& name) { return factories.at(name)().start(); }; return configure("cache") == "cache:ready"; }},
         {"interceptor", [] { std::unordered_map<std::string, std::string> request{{"operation", "save"}}; const auto auditInterceptor = [&](const std::function<std::string()>& next) { request["audit"] = "recorded"; return next(); }; return auditInterceptor([&] { return request.at("audit"); }) == "recorded"; }},
         {"extension-interface", [] { struct Diagnostics { std::string status() const { return "diagnostics:ready"; } }; struct CatalogueComponent { std::optional<Diagnostics> extension(const std::string& name) const { return name == "diagnostics" ? std::optional<Diagnostics>{Diagnostics{}} : std::nullopt; } }; const auto diagnostics = CatalogueComponent{}.extension("diagnostics"); return diagnostics.has_value() && diagnostics->status() == "diagnostics:ready"; }},
+        {"asynchronous-completion-token", [] { struct CompletionToken { std::string requestId; std::optional<std::string> result; void complete(std::string value) { result = std::move(value); } }; CompletionToken token{"run-42"}; token.complete("saved"); return token.requestId == "run-42" && token.result == "saved"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

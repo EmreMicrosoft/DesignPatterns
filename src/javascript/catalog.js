@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 250;
+const EXPECTED_PATTERN_COUNT = 251;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -121,6 +121,13 @@ function extensionInterfaceContract() {
   return new CatalogueComponent().extension("diagnostics").status() === "diagnostics:ready";
 }
 
+function asynchronousCompletionTokenContract() {
+  class CompletionToken { constructor(requestId) { this.requestId = requestId; this.result = undefined; } complete(result) { this.result = result; } }
+  const token = new CompletionToken("run-42");
+  token.complete("saved");
+  return token.requestId === "run-42" && token.result === "saved";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -150,6 +157,7 @@ const contracts = Object.freeze({
   "component-configurator": componentConfiguratorContract,
   interceptor: interceptorContract,
   "extension-interface": extensionInterfaceContract,
+  "asynchronous-completion-token": asynchronousCompletionTokenContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

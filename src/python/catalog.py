@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 250
+EXPECTED_PATTERN_COUNT = 251
 
 
 @dataclass(frozen=True)
@@ -191,6 +191,19 @@ def contracts() -> dict[str, Callable[[], bool]]:
         diagnostics = CatalogueComponent().extension("diagnostics")
         return diagnostics is not None and diagnostics.status() == "diagnostics:ready"
 
+    def asynchronous_completion_token() -> bool:
+        class CompletionToken:
+            def __init__(self, request_id: str) -> None:
+                self.request_id = request_id
+                self.result: str | None = None
+
+            def complete(self, result: str) -> None:
+                self.result = result
+
+        token = CompletionToken("run-42")
+        token.complete("saved")
+        return token.request_id == "run-42" and token.result == "saved"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -208,6 +221,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "component-configurator": component_configurator,
         "interceptor": interceptor,
         "extension-interface": extension_interface,
+        "asynchronous-completion-token": asynchronous_completion_token,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

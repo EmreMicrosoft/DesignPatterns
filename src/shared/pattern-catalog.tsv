@@ -233,6 +233,7 @@ wrapper-facade|POSA2|architecture|Wrapper Facade|wrapper-facade
 component-configurator|POSA2|architecture|Component Configurator|component-configurator
 interceptor|POSA2|architecture|Interceptor|interceptor
 extension-interface|POSA2|architecture|Extension Interface|extension-interface
+asynchronous-completion-token|POSA2|architecture|Asynchronous Completion Token|asynchronous-completion-token
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

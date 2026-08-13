@@ -244,6 +244,7 @@ distributed-tracing|Microservices|observability|Distributed Tracing|distributed-
 exception-tracking|Microservices|observability|Exception Tracking|exception-tracking
 log-deployments-and-changes|Microservices|observability|Log Deployments and Changes|log-deployments-and-changes
 server-side-page-fragment-composition|Microservices|presentation|Server-Side Page Fragment Composition|server-side-page-fragment-composition
+client-side-ui-composition|Microservices|presentation|Client-Side UI Composition|client-side-ui-composition
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

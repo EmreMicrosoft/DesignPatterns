@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 261;
+const EXPECTED_PATTERN_COUNT = 262;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -252,6 +252,7 @@ function exceptionTrackingContract(): boolean {
 }
 function logDeploymentsAndChangesContract(): boolean { class ChangeLog { readonly entries: string[] = []; recordDeployment(version: string): void { this.entries.push(`deployed:${version}`); } } const log = new ChangeLog(); log.recordDeployment("2026.08.13"); return log.entries.join(",") === "deployed:2026.08.13"; }
 function serverSidePageFragmentCompositionContract(): boolean { class PageComposer { compose(header: string, body: string): string { return `<page>${header}${body}</page>`; } } return new PageComposer().compose("<header>catalogue</header>", "<main>patterns</main>") === "<page><header>catalogue</header><main>patterns</main></page>"; }
+function clientSideUiCompositionContract(): boolean { class Dashboard { compose(fragments: ReadonlyMap<string, string>): string { return ["catalogue", "status"].map((name) => fragments.get(name)!).join(" | "); } } return new Dashboard().compose(new Map([["catalogue", "patterns:262"], ["status", "ready"]])) === "patterns:262 | ready"; }
 
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
@@ -293,6 +294,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "exception-tracking": exceptionTrackingContract,
   "log-deployments-and-changes": logDeploymentsAndChangesContract,
   "server-side-page-fragment-composition": serverSidePageFragmentCompositionContract,
+  "client-side-ui-composition": clientSideUiCompositionContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

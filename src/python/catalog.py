@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock, local
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 261
+EXPECTED_PATTERN_COUNT = 262
 
 
 @dataclass(frozen=True)
@@ -346,6 +346,12 @@ def contracts() -> dict[str, Callable[[], bool]]:
             def compose(self, header: str, body: str) -> str: return f"<page>{header}{body}</page>"
         return PageComposer().compose("<header>catalogue</header>", "<main>patterns</main>") == "<page><header>catalogue</header><main>patterns</main></page>"
 
+    def client_side_ui_composition() -> bool:
+        class Dashboard:
+            def compose(self, fragments: dict[str, str]) -> str:
+                return " | ".join(fragments[name] for name in ["catalogue", "status"])
+        return Dashboard().compose({"catalogue": "patterns:262", "status": "ready"}) == "patterns:262 | ready"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -374,6 +380,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "exception-tracking": exception_tracking,
         "log-deployments-and-changes": log_deployments_and_changes,
         "server-side-page-fragment-composition": server_side_page_fragment_composition,
+        "client-side-ui-composition": client_side_ui_composition,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 261;
+export const EXPECTED_PATTERN_COUNT = 262;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -60,6 +60,7 @@ const scenarios = {
   "exception-tracking": scenario(text("capture errors with service context", "hataları servis bağlamıyla yakalamak"), text("catalogue unavailable", "katalog kullanılamıyor"), [text("A service catches an unexpected failure.", "Bir servis beklenmeyen hatayı yakalar."), text("The tracker records the error and the reporting service.", "İzleyici hatayı ve bildiren servisi kaydeder."), text("Operators can group and investigate the report.", "Operatörler bildirimi gruplayıp inceleyebilir.")], () => "catalogue-api: catalogue unavailable"),
   "log-deployments-and-changes": scenario(text("make runtime changes visible beside service events", "çalışma zamanı değişikliklerini servis olaylarının yanında görünür kılmak"), text("deploy 2026.08.13", "2026.08.13 dağıtımı"), [text("A release is deployed to the service.", "Bir sürüm servise dağıtılır."), text("The change log records the deployment version.", "Değişiklik günlüğü dağıtım sürümünü kaydeder."), text("Operators correlate new behavior with that change.", "Operatörler yeni davranışı bu değişiklikle ilişkilendirir.")], () => "deployed:2026.08.13"),
   "server-side-page-fragment-composition": scenario(text("assemble a page from service-owned fragments", "bir sayfayı servise ait parçalarla birleştirmek"), text("header + catalogue list", "başlık + katalog listesi"), [text("The page request reaches a server-side composer.", "Sayfa isteği sunucu tarafı birleştiriciye ulaşır."), text("The composer receives rendered fragments from their owners.", "Birleştirici, sahiplerinden işlenmiş parçaları alır."), text("It returns one complete page to the browser.", "Tarayıcıya tek, eksiksiz sayfayı döndürür.")], () => "<page>catalogue + patterns</page>"),
+  "client-side-ui-composition": scenario(text("combine independently owned UI fragments in the browser", "bağımsız sahipli UI parçalarını tarayıcıda birleştirmek"), text("catalogue + status", "katalog + durum"), [text("The browser loads the shell for the dashboard.", "Tarayıcı gösterge paneli kabuğunu yükler."), text("Each UI owner provides its fragment data or view.", "Her UI sahibi parça verisini veya görünümünü sağlar."), text("The client composes the fragments into one screen.", "İstemci parçaları tek ekranda birleştirir.")], () => "patterns:262 | ready"),
 };
 
 export function parseCatalogue(tsv) {

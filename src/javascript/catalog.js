@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 261;
+const EXPECTED_PATTERN_COUNT = 262;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -227,6 +227,7 @@ function exceptionTrackingContract() {
 }
 function logDeploymentsAndChangesContract() { class ChangeLog { constructor() { this.entries = []; } recordDeployment(version) { this.entries.push(`deployed:${version}`); } } const log = new ChangeLog(); log.recordDeployment("2026.08.13"); return log.entries.join(",") === "deployed:2026.08.13"; }
 function serverSidePageFragmentCompositionContract() { class PageComposer { compose(header, body) { return `<page>${header}${body}</page>`; } } return new PageComposer().compose("<header>catalogue</header>", "<main>patterns</main>") === "<page><header>catalogue</header><main>patterns</main></page>"; }
+function clientSideUiCompositionContract() { class Dashboard { compose(fragments) { return ["catalogue", "status"].map((name) => fragments.get(name)).join(" | "); } } return new Dashboard().compose(new Map([["catalogue", "patterns:262"], ["status", "ready"]])) === "patterns:262 | ready"; }
 
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
@@ -268,6 +269,7 @@ const contracts = Object.freeze({
   "exception-tracking": exceptionTrackingContract,
   "log-deployments-and-changes": logDeploymentsAndChangesContract,
   "server-side-page-fragment-composition": serverSidePageFragmentCompositionContract,
+  "client-side-ui-composition": clientSideUiCompositionContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 246;
+constexpr std::size_t ExpectedPatternCount = 247;
 
 struct PatternDefinition {
     std::string identifier;
@@ -65,6 +65,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"whole-part", [] { struct Folder { std::vector<int> parts; void addPart(int size) { parts.push_back(size); } int totalSize() const { int total = 0; for (const auto size : parts) total += size; return total; } }; Folder archive; archive.addPart(3); archive.addPart(5); return archive.totalSize() == 8; }},
         {"client-dispatcher-server", [] { const std::unordered_map<std::string, std::function<std::string(int)>> servers{{"calculate", [](int payload) { return "result:" + std::to_string(payload * 2); }}}; const auto dispatcher = [&](const std::string& operation, int payload) { return servers.at(operation)(payload); }; const auto client = [&] { return dispatcher("calculate", 21); }; return client() == "result:42"; }},
         {"counted-pointer", [] { struct SharedHandle { std::string value; int references{1}; SharedHandle acquire() { ++references; return *this; } int release() { return --references; } }; SharedHandle document{"invoice"}; const auto observer = document.acquire(); return observer.value == "invoice" && document.release() == 1; }},
+        {"wrapper-facade", [] { struct SocketLibrary { std::string connect(const std::string& host, int port) const { return host + ":" + std::to_string(port); } }; struct CatalogueConnection { SocketLibrary socketLibrary; std::string open() const { return socketLibrary.connect("catalogue", 443); } }; return CatalogueConnection{}.open() == "catalogue:443"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

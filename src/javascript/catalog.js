@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 246;
+const EXPECTED_PATTERN_COUNT = 247;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -92,6 +92,15 @@ function countedPointerContract() {
   return observer.value === "invoice" && document.release() === 1;
 }
 
+function wrapperFacadeContract() {
+  class SocketLibrary { connect(host, port) { return `${host}:${port}`; } }
+  class CatalogueConnection {
+    constructor(socketLibrary) { this.socketLibrary = socketLibrary; }
+    open() { return this.socketLibrary.connect("catalogue", 443); }
+  }
+  return new CatalogueConnection(new SocketLibrary()).open() === "catalogue:443";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -117,6 +126,7 @@ const contracts = Object.freeze({
   "whole-part": wholePartContract,
   "client-dispatcher-server": clientDispatcherServerContract,
   "counted-pointer": countedPointerContract,
+  "wrapper-facade": wrapperFacadeContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

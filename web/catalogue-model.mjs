@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 246;
+export const EXPECTED_PATTERN_COUNT = 247;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -45,6 +45,7 @@ const scenarios = {
   "whole-part": scenario(text("keep ownership and aggregate behavior with a whole", "sahipliği ve toplu davranışı bütünle birlikte tutmak"), text("parts 3 and 5", "3 ve 5 parçaları"), [text("The whole accepts owned parts.", "Bütün sahip olduğu parçaları kabul eder."), text("It asks each part for its contribution.", "Her parçadan katkısını ister."), text("It returns one aggregate value.", "Tek bir toplam değer döndürür.")], () => 8),
   "client-dispatcher-server": scenario(text("resolve an operation request through a dispatcher", "işlem isteğini bir dağıtıcı üzerinden çözmek"), text("calculate 21", "21 hesapla"), [text("The client requests a named operation.", "İstemci adlandırılmış bir işlem ister."), text("The dispatcher finds the responsible server.", "Dağıtıcı sorumlu sunucuyu bulur."), text("The server returns the calculated response.", "Sunucu hesaplanmış yanıtı döndürür.")], () => "result: 42"),
   "counted-pointer": scenario(text("make shared ownership visible with a reference count", "paylaşılan sahipliği referans sayısıyla görünür kılmak"), text("shared invoice", "paylaşılan fatura"), [text("The first client owns one reference.", "İlk istemci bir referansa sahiptir."), text("A second client acquires a shared reference.", "İkinci istemci paylaşılan bir referans edinir."), text("Releasing it leaves the original owner with one reference.", "Bırakıldığında özgün sahipte bir referans kalır.")], () => 1),
+  "wrapper-facade": scenario(text("hide a low-level API behind a focused, safer interface", "düşük seviyeli bir API'yi odaklı ve daha güvenli bir arayüzün arkasına saklamak"), text("open catalogue connection", "katalog bağlantısını aç"), [text("The caller asks the facade for one domain operation.", "Çağıran taraf cepheden tek bir alan işlemi ister."), text("The facade chooses the low-level socket call and its defaults.", "Cephe düşük seviyeli soket çağrısını ve varsayılanlarını seçer."), text("The caller receives a simple connection result.", "Çağıran taraf basit bir bağlantı sonucu alır.")], () => "catalogue:443"),
 };
 
 export function parseCatalogue(tsv) {

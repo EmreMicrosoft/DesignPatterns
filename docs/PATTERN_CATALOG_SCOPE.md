@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 246 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 247 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -33,6 +33,10 @@ and Counted Pointer, which maintains explicit shared-reference ownership. Togeth
 with the already catalogued Layers, Pipes and Filters, Model-View-Controller,
 Microkernel, Proxy and Publisher-Subscriber patterns, this completes the POSA
 Volume 1 pattern list.
+
+The next audited extension is POSA Volume 2. Its Wrapper Facade pattern hides
+low-level socket setup behind a focused connection API in the independently
+authored `wrapper-facade` contract.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

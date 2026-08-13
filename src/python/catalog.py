@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 246
+EXPECTED_PATTERN_COUNT = 247
 
 
 @dataclass(frozen=True)
@@ -144,6 +144,20 @@ def contracts() -> dict[str, Callable[[], bool]]:
         observer = document.acquire()
         return observer.value == "invoice" and document.release() == 1
 
+    def wrapper_facade() -> bool:
+        class SocketLibrary:
+            def connect(self, host: str, port: int) -> str:
+                return f"{host}:{port}"
+
+        class CatalogueConnection:
+            def __init__(self, socket_library: SocketLibrary) -> None:
+                self._socket_library = socket_library
+
+            def open(self) -> str:
+                return self._socket_library.connect("catalogue", 443)
+
+        return CatalogueConnection(SocketLibrary()).open() == "catalogue:443"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -157,6 +171,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "whole-part": whole_part,
         "client-dispatcher-server": client_dispatcher_server,
         "counted-pointer": counted_pointer,
+        "wrapper-facade": wrapper_facade,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

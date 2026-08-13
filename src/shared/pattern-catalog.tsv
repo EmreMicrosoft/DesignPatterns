@@ -229,6 +229,7 @@ forwarder-receiver|POSA1|architecture|Forwarder-Receiver|forwarder-receiver
 whole-part|POSA1|architecture|Whole-Part|whole-part
 client-dispatcher-server|POSA1|architecture|Client-Dispatcher-Server|client-dispatcher-server
 counted-pointer|POSA1|resource-management|Counted Pointer|counted-pointer
+wrapper-facade|POSA2|architecture|Wrapper Facade|wrapper-facade
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

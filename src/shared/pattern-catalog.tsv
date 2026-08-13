@@ -225,6 +225,7 @@ reflection|POSA1|architecture|Reflection|reflection
 master-slave|POSA1|architecture|Master-Slave|master-slave
 command-processor|POSA1|architecture|Command Processor|command-processor
 view-handler|POSA1|architecture|View Handler|view-handler
+forwarder-receiver|POSA1|architecture|Forwarder-Receiver|forwarder-receiver
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

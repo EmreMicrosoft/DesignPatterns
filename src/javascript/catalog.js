@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 242;
+const EXPECTED_PATTERN_COUNT = 243;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -54,6 +54,12 @@ function viewHandlerContract() {
   return commands.get("save-clicked")() === "save-document";
 }
 
+function forwarderReceiverContract() {
+  const receiver = (payload) => `received:${payload}`;
+  const forwarder = (message) => receiver(message.replace("send:", ""));
+  return forwarder("send:invoice") === "received:invoice";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -75,6 +81,7 @@ const contracts = Object.freeze({
   "master-slave": masterSlaveContract,
   "command-processor": commandProcessorContract,
   "view-handler": viewHandlerContract,
+  "forwarder-receiver": forwarderReceiverContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

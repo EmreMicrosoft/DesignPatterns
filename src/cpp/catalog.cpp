@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 242;
+constexpr std::size_t ExpectedPatternCount = 243;
 
 struct PatternDefinition {
     std::string identifier;
@@ -61,6 +61,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"master-slave", [] { const std::vector<std::function<int(int)>> workers{[](int value) { return value * 2; }, [](int value) { return value * 3; }}; int total = 0; for (const auto& worker : workers) total += worker(2); return total == 10; }},
         {"command-processor", [] { std::vector<std::string> executed; std::vector<std::function<void()>> pending{[&] { executed.push_back("refresh"); }}; pending.front()(); pending.erase(pending.begin()); return executed == std::vector<std::string>{"refresh"} && pending.empty(); }},
         {"view-handler", [] { const std::unordered_map<std::string, std::function<std::string()>> commands{{"save-clicked", [] { return "save-document"; }}}; return commands.at("save-clicked")() == "save-document"; }},
+        {"forwarder-receiver", [] { const auto receiver = [](const std::string& payload) { return "received:" + payload; }; const auto forwarder = [&](const std::string& message) { return receiver(message.substr(std::string{"send:"}.size())); }; return forwarder("send:invoice") == "received:invoice"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

@@ -9,8 +9,19 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 235;
+const EXPECTED_PATTERN_COUNT = 236;
 const readFileSync = require("node:fs").readFileSync;
+
+function blackboardContract(): boolean {
+  const sharedFacts: string[] = [];
+  const extractTokens = (): void => { sharedFacts.push("candidate:invoice", "amount:42"); };
+  const inferClassification = (): void => {
+    if (sharedFacts.includes("candidate:invoice")) sharedFacts.push("classification:billable");
+  };
+  extractTokens();
+  inferClassification();
+  return sharedFacts.at(-1) === "classification:billable";
+}
 
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
@@ -26,6 +37,7 @@ function parseCatalog(path: string): readonly PatternDefinition[] {
 
 const contracts: Readonly<Record<string, () => boolean>> = {
   boundary: () => new Map([["request", "accepted"]]).get("request") === "accepted",
+  blackboard: blackboardContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

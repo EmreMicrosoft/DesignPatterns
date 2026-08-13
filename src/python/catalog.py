@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 235
+EXPECTED_PATTERN_COUNT = 236
 
 
 @dataclass(frozen=True)
@@ -32,8 +32,23 @@ def parse_catalog(path: Path) -> list[PatternDefinition]:
 
 
 def contracts() -> dict[str, Callable[[], bool]]:
+    def blackboard() -> bool:
+        shared_facts: list[str] = []
+
+        def extract_tokens() -> None:
+            shared_facts.extend(["candidate:invoice", "amount:42"])
+
+        def infer_classification() -> None:
+            if "candidate:invoice" in shared_facts:
+                shared_facts.append("classification:billable")
+
+        extract_tokens()
+        infer_classification()
+        return shared_facts[-1] == "classification:billable"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
+        "blackboard": blackboard,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

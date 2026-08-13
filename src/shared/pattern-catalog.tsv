@@ -218,6 +218,7 @@ static-content-hosting|Azure|deployment|Static Content Hosting|deployment
 throttling|Azure|resilience|Throttling|resilience
 valet-key|Azure|security|Valet Key|security
 file-transfer|EIP|integration|File Transfer|boundary
+blackboard|POSA1|architecture|Blackboard|blackboard
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

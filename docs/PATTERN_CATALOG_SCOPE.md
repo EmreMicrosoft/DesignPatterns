@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 235 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 236 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -16,6 +16,10 @@ Hexagonal, Clean and Onion Architecture, Microkernel, Layered Architecture,
 Event-Driven Architecture, Actor Model, Active Object, Reactor, Proactor,
 Half-Sync/Half-Async, Leader-Followers, Monitor Object, Thread Pool,
 Future/Promise and Read-Write Lock.
+
+The catalogue is extended one pattern per published update beyond this initial
+scope. The first addition is POSA Volume 1's Blackboard pattern, modelled as
+independent knowledge sources that refine one shared fact set.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++
@@ -36,6 +40,9 @@ architectural vocabulary, not copied source text or implementations.
   deployment, discovery, reliability, security and observability.
 - [Azure cloud design patterns](https://learn.microsoft.com/en-us/azure/architecture/patterns/)
   catalogs technology-agnostic distributed-system solutions and their tradeoffs.
+- [Pattern-Oriented Software Architecture, Volume 1](https://uat.store.wiley.com/Pattern-Oriented%2BSoftware%2BArchitecture%2C%2BVolume%2B1%2C%2BA%2BSystem%2Bof%2BPatterns-p-x000029474)
+  spans architectural patterns, design patterns and idioms. Its Blackboard
+  pattern is covered by the independently authored `blackboard` contract.
 
 ## Extension rule
 

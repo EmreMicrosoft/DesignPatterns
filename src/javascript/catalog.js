@@ -3,7 +3,18 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 235;
+const EXPECTED_PATTERN_COUNT = 236;
+
+function blackboardContract() {
+  const sharedFacts = [];
+  const extractTokens = () => sharedFacts.push("candidate:invoice", "amount:42");
+  const inferClassification = () => {
+    if (sharedFacts.includes("candidate:invoice")) sharedFacts.push("classification:billable");
+  };
+  extractTokens();
+  inferClassification();
+  return sharedFacts.at(-1) === "classification:billable";
+}
 
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
@@ -19,6 +30,7 @@ function parseCatalog(path) {
 
 const contracts = Object.freeze({
   boundary: () => new Map([["request", "accepted"]]).get("request") === "accepted",
+  blackboard: blackboardContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

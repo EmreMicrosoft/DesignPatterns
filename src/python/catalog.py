@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 254
+EXPECTED_PATTERN_COUNT = 255
 
 
 @dataclass(frozen=True)
@@ -262,6 +262,24 @@ def contracts() -> dict[str, Callable[[], bool]]:
         lock_strategy = RecordingLock()
         return ProtectedCounter(lock_strategy).increment() == 1 and lock_strategy.events == ["acquire", "release"]
 
+    def thread_safe_interface() -> bool:
+        class SafeInventory:
+            def __init__(self) -> None:
+                self._lock = Lock()
+                self._items: list[str] = []
+
+            def add(self, item: str) -> None:
+                with self._lock:
+                    self._items.append(item)
+
+            def count(self) -> int:
+                with self._lock:
+                    return len(self._items)
+
+        inventory = SafeInventory()
+        inventory.add("catalogue")
+        return inventory.count() == 1
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -283,6 +301,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "acceptor-connector": acceptor_connector,
         "scoped-locking": scoped_locking,
         "strategized-locking": strategized_locking,
+        "thread-safe-interface": thread_safe_interface,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

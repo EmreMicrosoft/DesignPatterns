@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 254 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 255 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -43,7 +43,8 @@ Asynchronous Completion Token associates a later result with the request that
 started the work. Acceptor-Connector separates peer connection setup from the
 work that follows. Scoped Locking bounds mutual exclusion to the scope that
 updates shared state. Strategized Locking injects a replaceable locking policy
-into protected work.
+into protected work. Thread-Safe Interface synchronizes every public operation
+that accesses an object's private state.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

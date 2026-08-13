@@ -237,6 +237,7 @@ asynchronous-completion-token|POSA2|architecture|Asynchronous Completion Token|a
 acceptor-connector|POSA2|architecture|Acceptor-Connector|acceptor-connector
 scoped-locking|POSA2|concurrency|Scoped Locking|scoped-locking
 strategized-locking|POSA2|concurrency|Strategized Locking|strategized-locking
+thread-safe-interface|POSA2|concurrency|Thread-Safe Interface|thread-safe-interface
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

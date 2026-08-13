@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 254;
+const EXPECTED_PATTERN_COUNT = 255;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -191,6 +191,23 @@ function strategizedLockingContract(): boolean {
   return new ProtectedCounter(lockStrategy).increment() === 1 && lockStrategy.events.join(",") === "acquire,release";
 }
 
+function threadSafeInterfaceContract(): boolean {
+  class SafeInventory {
+    readonly #items: string[] = [];
+    #busy = false;
+    #synchronize<T>(action: () => T): T {
+      if (this.#busy) throw new Error("Concurrent access is not allowed.");
+      this.#busy = true;
+      try { return action(); } finally { this.#busy = false; }
+    }
+    add(item: string): void { this.#synchronize(() => this.#items.push(item)); }
+    count(): number { return this.#synchronize(() => this.#items.length); }
+  }
+  const inventory = new SafeInventory();
+  inventory.add("catalogue");
+  return inventory.count() === 1;
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -224,6 +241,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "acceptor-connector": acceptorConnectorContract,
   "scoped-locking": scopedLockingContract,
   "strategized-locking": strategizedLockingContract,
+  "thread-safe-interface": threadSafeInterfaceContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

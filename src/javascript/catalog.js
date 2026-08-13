@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 254;
+const EXPECTED_PATTERN_COUNT = 255;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -166,6 +166,23 @@ function strategizedLockingContract() {
   return new ProtectedCounter(lockStrategy).increment() === 1 && lockStrategy.events.join(",") === "acquire,release";
 }
 
+function threadSafeInterfaceContract() {
+  class SafeInventory {
+    #items = [];
+    #busy = false;
+    #synchronize(action) {
+      if (this.#busy) throw new Error("Concurrent access is not allowed.");
+      this.#busy = true;
+      try { return action(); } finally { this.#busy = false; }
+    }
+    add(item) { this.#synchronize(() => this.#items.push(item)); }
+    count() { return this.#synchronize(() => this.#items.length); }
+  }
+  const inventory = new SafeInventory();
+  inventory.add("catalogue");
+  return inventory.count() === 1;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -199,6 +216,7 @@ const contracts = Object.freeze({
   "acceptor-connector": acceptorConnectorContract,
   "scoped-locking": scopedLockingContract,
   "strategized-locking": strategizedLockingContract,
+  "thread-safe-interface": threadSafeInterfaceContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

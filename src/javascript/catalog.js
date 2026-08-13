@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 256;
+const EXPECTED_PATTERN_COUNT = 257;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -201,6 +201,17 @@ function doubleCheckedLockingContract() {
   return catalogue.instance() === catalogue.instance() && catalogue.creations === 1;
 }
 
+function threadSpecificStorageContract() {
+  class RequestContexts {
+    constructor() { this.contexts = new Map(); }
+    setRequestId(threadId, requestId) { this.contexts.set(threadId, { requestId }); }
+    requestIdFor(threadId) { return this.contexts.get(threadId)?.requestId; }
+  }
+  const contexts = new RequestContexts();
+  contexts.setRequestId("worker-1", "run-42");
+  return contexts.requestIdFor("worker-1") === "run-42" && contexts.requestIdFor("worker-2") === undefined;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -236,6 +247,7 @@ const contracts = Object.freeze({
   "strategized-locking": strategizedLockingContract,
   "thread-safe-interface": threadSafeInterfaceContract,
   "double-checked-locking": doubleCheckedLockingContract,
+  "thread-specific-storage": threadSpecificStorageContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

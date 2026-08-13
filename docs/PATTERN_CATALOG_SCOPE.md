@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 256 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 257 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -46,6 +46,7 @@ updates shared state. Strategized Locking injects a replaceable locking policy
 into protected work. Thread-Safe Interface synchronizes every public operation
 that accesses an object's private state. Double-Checked Locking performs lazy
 initialization checks before and inside the synchronization boundary.
+Thread-Specific Storage resolves context from a per-worker local slot.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

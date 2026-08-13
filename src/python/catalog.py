@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from threading import Lock
+from threading import Lock, local
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 256
+EXPECTED_PATTERN_COUNT = 257
 
 
 @dataclass(frozen=True)
@@ -298,6 +298,21 @@ def contracts() -> dict[str, Callable[[], bool]]:
         catalogue = LazyCatalogue()
         return catalogue.instance() is catalogue.instance() and catalogue.creations == 1
 
+    def thread_specific_storage() -> bool:
+        class RequestContext:
+            def __init__(self) -> None:
+                self._storage = local()
+
+            def set_request_id(self, request_id: str) -> None:
+                self._storage.request_id = request_id
+
+            def request_id(self) -> str | None:
+                return getattr(self._storage, "request_id", None)
+
+        context = RequestContext()
+        context.set_request_id("run-42")
+        return context.request_id() == "run-42"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -321,6 +336,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "strategized-locking": strategized_locking,
         "thread-safe-interface": thread_safe_interface,
         "double-checked-locking": double_checked_locking,
+        "thread-specific-storage": thread_specific_storage,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

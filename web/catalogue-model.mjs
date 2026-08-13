@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 256;
+export const EXPECTED_PATTERN_COUNT = 257;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -55,6 +55,7 @@ const scenarios = {
   "strategized-locking": scenario(text("choose a locking policy without changing protected work", "korunan işi değiştirmeden kilitleme politikasını seçmek"), text("increment counter", "sayacı artır"), [text("The counter receives a lock strategy as a dependency.", "Sayaç bir kilit stratejisini bağımlılık olarak alır."), text("The strategy acquires protection around the increment.", "Strateji artırımın çevresinde korumayı alır."), text("The strategy releases protection after the operation.", "İşlemden sonra strateji korumayı bırakır.")], () => "acquire → incremented:1 → release"),
   "thread-safe-interface": scenario(text("make each public inventory operation safe to call", "her açık envanter işlemini güvenle çağrılabilir yapmak"), text("add catalogue", "katalog ekle"), [text("A caller invokes the public add operation.", "Çağıran taraf açık add işlemini çağırır."), text("The interface synchronizes access to its private state.", "Arayüz özel durumuna erişimi eşzamanlar."), text("The caller reads the consistent item count.", "Çağıran taraf tutarlı öğe sayısını okur.")], () => "count:1"),
   "double-checked-locking": scenario(text("create a shared catalogue lazily only once", "paylaşılan kataloğu yalnızca bir kez tembel olarak oluşturmak"), text("get catalogue", "kataloğu al"), [text("The first check avoids locking after initialization.", "İlk kontrol başlatma sonrasında kilitlemeyi önler."), text("A missing instance is checked again while protected.", "Eksik örnek koruma altındayken yeniden kontrol edilir."), text("Exactly one ready catalogue instance is returned.", "Tam olarak bir hazır katalog örneği döndürülür.")], () => "ready; creations:1"),
+  "thread-specific-storage": scenario(text("keep request context isolated per worker", "istek bağlamını her worker için yalıtılmış tutmak"), text("worker-1 / run-42", "worker-1 / run-42"), [text("A worker stores its request id in its local slot.", "Bir worker istek kimliğini yerel yuvasına koyar."), text("The storage resolves data using that worker's execution context.", "Depolama veriyi o worker'ın yürütme bağlamıyla çözer."), text("Another worker has no access to that local value.", "Başka bir worker bu yerel değere erişemez.")], () => "worker-1:run-42; worker-2:empty"),
 };
 
 export function parseCatalogue(tsv) {

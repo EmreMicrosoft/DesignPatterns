@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 236
+EXPECTED_PATTERN_COUNT = 237
 
 
 @dataclass(frozen=True)
@@ -46,9 +46,18 @@ def contracts() -> dict[str, Callable[[], bool]]:
         infer_classification()
         return shared_facts[-1] == "classification:billable"
 
+    def broker() -> bool:
+        service_registry = {"pricing": lambda product_id: f"quote:{product_id}"}
+
+        def request(service_name: str, product_id: str) -> str:
+            return service_registry[service_name](product_id)
+
+        return request("pricing", "42") == "quote:42"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
+        "broker": broker,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 236;
+const EXPECTED_PATTERN_COUNT = 237;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -21,6 +21,12 @@ function blackboardContract(): boolean {
   extractTokens();
   inferClassification();
   return sharedFacts.at(-1) === "classification:billable";
+}
+
+function brokerContract(): boolean {
+  const serviceRegistry = new Map<string, (productId: string) => string>([["pricing", (productId) => `quote:${productId}`]]);
+  const request = (serviceName: string, productId: string): string => serviceRegistry.get(serviceName)!(productId);
+  return request("pricing", "42") === "quote:42";
 }
 
 function parseCatalog(path: string): readonly PatternDefinition[] {
@@ -38,6 +44,7 @@ function parseCatalog(path: string): readonly PatternDefinition[] {
 const contracts: Readonly<Record<string, () => boolean>> = {
   boundary: () => new Map([["request", "accepted"]]).get("request") === "accepted",
   blackboard: blackboardContract,
+  broker: brokerContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

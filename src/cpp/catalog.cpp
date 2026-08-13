@@ -11,7 +11,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 236;
+constexpr std::size_t ExpectedPatternCount = 237;
 
 struct PatternDefinition {
     std::string identifier;
@@ -54,6 +54,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
     return {
         {"boundary", [] { return std::unordered_map<std::string, std::string>{{"request", "accepted"}}.at("request") == "accepted"; }},
         {"blackboard", [] { std::vector<std::string> sharedFacts; const auto extractTokens = [&] { sharedFacts.insert(sharedFacts.end(), {"candidate:invoice", "amount:42"}); }; const auto inferClassification = [&] { if (std::find(sharedFacts.begin(), sharedFacts.end(), "candidate:invoice") != sharedFacts.end()) sharedFacts.push_back("classification:billable"); }; extractTokens(); inferClassification(); return sharedFacts.back() == "classification:billable"; }},
+        {"broker", [] { const std::unordered_map<std::string, std::string> serviceRegistry{{"pricing", "pricing-v1"}}; const auto request = [&](const std::string& serviceName, const std::string& productId) { return serviceRegistry.at(serviceName) == "pricing-v1" ? "quote:" + productId : ""; }; return request("pricing", "42") == "quote:42"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

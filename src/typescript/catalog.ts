@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 255;
+const EXPECTED_PATTERN_COUNT = 256;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -208,6 +208,24 @@ function threadSafeInterfaceContract(): boolean {
   return inventory.count() === 1;
 }
 
+function doubleCheckedLockingContract(): boolean {
+  class LazyCatalogue {
+    #instance: { status: string } | undefined;
+    creations = 0;
+    instance(): { status: string } {
+      if (this.#instance === undefined) {
+        if (this.#instance === undefined) {
+          this.#instance = { status: "ready" };
+          this.creations += 1;
+        }
+      }
+      return this.#instance;
+    }
+  }
+  const catalogue = new LazyCatalogue();
+  return catalogue.instance() === catalogue.instance() && catalogue.creations === 1;
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -242,6 +260,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "scoped-locking": scopedLockingContract,
   "strategized-locking": strategizedLockingContract,
   "thread-safe-interface": threadSafeInterfaceContract,
+  "double-checked-locking": doubleCheckedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

@@ -4,7 +4,7 @@
 
 GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure Cloud
 Design Patterns, eksiksiz POSA Volume 1 kataloğu ve seçilmiş DDD, mimari ve
- eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 255
+ eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 256
 kayıtlı katalogdur.
 
 ## Diller ve mimari
@@ -16,8 +16,8 @@ kayıtlı katalogdur.
   kimliği, kaynak kataloğu, ailesi ve çalıştırılabilir concern için tek doğruluk
   kaynağıdır.
 
-En son eklenen POSA Volume 2 Thread-Safe Interface desenidir: her açık envanter
-işlemi, nesnenin özel durumuna erişimi eşzamanlar.
+En son eklenen POSA Volume 2 Double-Checked Locking desenidir: tembel başlatma,
+eşzamanlama öncesinde ve içinde kontrol edilerek tek örnek oluşturulur.
 
 ## Doğrulama
 
@@ -30,7 +30,7 @@ yerelde isteğe bağlıdır; GitHub Actions üzerinde doğrulanır.
 
 ## Etkileşimli web gezgini
 
-[`web/index.html`](web/index.html), 255 kaydın tamamı için bağımlılıksız ve iki
+[`web/index.html`](web/index.html), 256 kaydın tamamı için bağımlılıksız ve iki
 dilli bir gezgindir. Kartları arayın veya filtreleyin, İngilizce ile Türkçe
 arasında geçiş yapın; ardından **Öğrenme senaryosunu çalıştır** düğmesiyle
 girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Tarayıcı

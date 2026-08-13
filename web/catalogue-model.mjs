@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 255;
+export const EXPECTED_PATTERN_COUNT = 256;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -54,6 +54,7 @@ const scenarios = {
   "scoped-locking": scenario(text("protect one update for a bounded scope", "tek güncellemeyi sınırlı bir kapsamda korumak"), text("update catalogue state", "katalog durumunu güncelle"), [text("A scope acquires the lock before touching shared state.", "Kapsam ortak duruma dokunmadan önce kilidi alır."), text("The protected update runs while the lock is owned.", "Korunan güncelleme kilit sahipken çalışır."), text("Leaving the scope releases the lock automatically.", "Kapsamdan çıkmak kilidi otomatik bırakır.")], () => "updated"),
   "strategized-locking": scenario(text("choose a locking policy without changing protected work", "korunan işi değiştirmeden kilitleme politikasını seçmek"), text("increment counter", "sayacı artır"), [text("The counter receives a lock strategy as a dependency.", "Sayaç bir kilit stratejisini bağımlılık olarak alır."), text("The strategy acquires protection around the increment.", "Strateji artırımın çevresinde korumayı alır."), text("The strategy releases protection after the operation.", "İşlemden sonra strateji korumayı bırakır.")], () => "acquire → incremented:1 → release"),
   "thread-safe-interface": scenario(text("make each public inventory operation safe to call", "her açık envanter işlemini güvenle çağrılabilir yapmak"), text("add catalogue", "katalog ekle"), [text("A caller invokes the public add operation.", "Çağıran taraf açık add işlemini çağırır."), text("The interface synchronizes access to its private state.", "Arayüz özel durumuna erişimi eşzamanlar."), text("The caller reads the consistent item count.", "Çağıran taraf tutarlı öğe sayısını okur.")], () => "count:1"),
+  "double-checked-locking": scenario(text("create a shared catalogue lazily only once", "paylaşılan kataloğu yalnızca bir kez tembel olarak oluşturmak"), text("get catalogue", "kataloğu al"), [text("The first check avoids locking after initialization.", "İlk kontrol başlatma sonrasında kilitlemeyi önler."), text("A missing instance is checked again while protected.", "Eksik örnek koruma altındayken yeniden kontrol edilir."), text("Exactly one ready catalogue instance is returned.", "Tam olarak bir hazır katalog örneği döndürülür.")], () => "ready; creations:1"),
 };
 
 export function parseCatalogue(tsv) {

@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 255
+EXPECTED_PATTERN_COUNT = 256
 
 
 @dataclass(frozen=True)
@@ -280,6 +280,24 @@ def contracts() -> dict[str, Callable[[], bool]]:
         inventory.add("catalogue")
         return inventory.count() == 1
 
+    def double_checked_locking() -> bool:
+        class LazyCatalogue:
+            def __init__(self) -> None:
+                self._lock = Lock()
+                self._instance: dict[str, str] | None = None
+                self.creations = 0
+
+            def instance(self) -> dict[str, str]:
+                if self._instance is None:
+                    with self._lock:
+                        if self._instance is None:
+                            self._instance = {"status": "ready"}
+                            self.creations += 1
+                return self._instance
+
+        catalogue = LazyCatalogue()
+        return catalogue.instance() is catalogue.instance() and catalogue.creations == 1
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -302,6 +320,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "scoped-locking": scoped_locking,
         "strategized-locking": strategized_locking,
         "thread-safe-interface": thread_safe_interface,
+        "double-checked-locking": double_checked_locking,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

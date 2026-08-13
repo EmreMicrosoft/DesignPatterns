@@ -238,6 +238,7 @@ acceptor-connector|POSA2|architecture|Acceptor-Connector|acceptor-connector
 scoped-locking|POSA2|concurrency|Scoped Locking|scoped-locking
 strategized-locking|POSA2|concurrency|Strategized Locking|strategized-locking
 thread-safe-interface|POSA2|concurrency|Thread-Safe Interface|thread-safe-interface
+double-checked-locking|POSA2|concurrency|Double-Checked Locking|double-checked-locking
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

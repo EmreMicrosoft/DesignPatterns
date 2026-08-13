@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 255;
+const EXPECTED_PATTERN_COUNT = 256;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -183,6 +183,24 @@ function threadSafeInterfaceContract() {
   return inventory.count() === 1;
 }
 
+function doubleCheckedLockingContract() {
+  class LazyCatalogue {
+    #instance;
+    creations = 0;
+    instance() {
+      if (this.#instance === undefined) {
+        if (this.#instance === undefined) {
+          this.#instance = { status: "ready" };
+          this.creations += 1;
+        }
+      }
+      return this.#instance;
+    }
+  }
+  const catalogue = new LazyCatalogue();
+  return catalogue.instance() === catalogue.instance() && catalogue.creations === 1;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -217,6 +235,7 @@ const contracts = Object.freeze({
   "scoped-locking": scopedLockingContract,
   "strategized-locking": strategizedLockingContract,
   "thread-safe-interface": threadSafeInterfaceContract,
+  "double-checked-locking": doubleCheckedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

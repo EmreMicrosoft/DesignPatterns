@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 243
+EXPECTED_PATTERN_COUNT = 244
 
 
 @dataclass(frozen=True)
@@ -99,6 +99,22 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return forwarder("send:invoice") == "received:invoice"
 
+    def whole_part() -> bool:
+        class Folder:
+            def __init__(self) -> None:
+                self._parts: list[int] = []
+
+            def add_part(self, size: int) -> None:
+                self._parts.append(size)
+
+            def total_size(self) -> int:
+                return sum(self._parts)
+
+        archive = Folder()
+        archive.add_part(3)
+        archive.add_part(5)
+        return archive.total_size() == 8
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -109,6 +125,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "command-processor": command_processor,
         "view-handler": view_handler,
         "forwarder-receiver": forwarder_receiver,
+        "whole-part": whole_part,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

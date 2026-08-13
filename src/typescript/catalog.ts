@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 243;
+const EXPECTED_PATTERN_COUNT = 244;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -67,6 +67,18 @@ function forwarderReceiverContract(): boolean {
   return forwarder("send:invoice") === "received:invoice";
 }
 
+function wholePartContract(): boolean {
+  class Folder {
+    readonly #parts: number[] = [];
+    addPart(size: number): void { this.#parts.push(size); }
+    totalSize(): number { return this.#parts.reduce((total, size) => total + size, 0); }
+  }
+  const archive = new Folder();
+  archive.addPart(3);
+  archive.addPart(5);
+  return archive.totalSize() === 8;
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -89,6 +101,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "command-processor": commandProcessorContract,
   "view-handler": viewHandlerContract,
   "forwarder-receiver": forwarderReceiverContract,
+  "whole-part": wholePartContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

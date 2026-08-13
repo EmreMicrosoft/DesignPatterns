@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 243;
+const EXPECTED_PATTERN_COUNT = 244;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -60,6 +60,18 @@ function forwarderReceiverContract() {
   return forwarder("send:invoice") === "received:invoice";
 }
 
+function wholePartContract() {
+  class Folder {
+    #parts = [];
+    addPart(size) { this.#parts.push(size); }
+    totalSize() { return this.#parts.reduce((total, size) => total + size, 0); }
+  }
+  const archive = new Folder();
+  archive.addPart(3);
+  archive.addPart(5);
+  return archive.totalSize() === 8;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -82,6 +94,7 @@ const contracts = Object.freeze({
   "command-processor": commandProcessorContract,
   "view-handler": viewHandlerContract,
   "forwarder-receiver": forwarderReceiverContract,
+  "whole-part": wholePartContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

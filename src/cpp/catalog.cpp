@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 243;
+constexpr std::size_t ExpectedPatternCount = 244;
 
 struct PatternDefinition {
     std::string identifier;
@@ -62,6 +62,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"command-processor", [] { std::vector<std::string> executed; std::vector<std::function<void()>> pending{[&] { executed.push_back("refresh"); }}; pending.front()(); pending.erase(pending.begin()); return executed == std::vector<std::string>{"refresh"} && pending.empty(); }},
         {"view-handler", [] { const std::unordered_map<std::string, std::function<std::string()>> commands{{"save-clicked", [] { return "save-document"; }}}; return commands.at("save-clicked")() == "save-document"; }},
         {"forwarder-receiver", [] { const auto receiver = [](const std::string& payload) { return "received:" + payload; }; const auto forwarder = [&](const std::string& message) { return receiver(message.substr(std::string{"send:"}.size())); }; return forwarder("send:invoice") == "received:invoice"; }},
+        {"whole-part", [] { struct Folder { std::vector<int> parts; void addPart(int size) { parts.push_back(size); } int totalSize() const { int total = 0; for (const auto size : parts) total += size; return total; } }; Folder archive; archive.addPart(3); archive.addPart(5); return archive.totalSize() == 8; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

@@ -28,6 +28,21 @@ yerelde isteğe bağlıdır; GitHub Actions üzerinde doğrulanır.
 ./scripts/verify-all.ps1
 ```
 
+## Etkileşimli web gezgini
+
+[`web/index.html`](web/index.html), 246 kaydın tamamı için bağımlılıksız ve iki
+dilli bir gezgindir. Kartları arayın veya filtreleyin, İngilizce ile Türkçe
+arasında geçiş yapın; ardından **Öğrenme senaryosunu çalıştır** düğmesiyle
+girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Tarayıcı
+modeli, her kaydın çalıştırılabilir concern'ine ait küçük bir öğretim
+simülasyonudur; üretim çalışma zamanı değildir.
+
+```powershell
+./scripts/serve-web.ps1
+```
+
+Sunucu çalışırken <http://localhost:8080/web/> adresini açın.
+
 ## Katkı
 
 Her seferinde tek özgün desen eklenir: manifest güncellenir, desteklenen her

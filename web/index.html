@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="An interactive, bilingual catalogue of executable design pattern learning scenarios.">
+    <title>DesignPatterns Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#patterns">Skip to patterns</a>
+    <header class="hero">
+      <div class="hero__top">
+        <a class="brand" href="../README.md">DesignPatterns</a>
+        <div class="language-switch" role="group" aria-label="Language">
+          <button type="button" data-language="en" aria-pressed="true">EN</button>
+          <button type="button" data-language="tr" aria-pressed="false">TR</button>
+        </div>
+      </div>
+      <p class="eyebrow" data-i18n="eyebrow">Interactive learning catalogue</p>
+      <h1 data-i18n="title">See a design pattern work.</h1>
+      <p class="hero__summary" data-i18n="summary">Browse every pattern, run its small executable learning scenario, and follow the data flow step by step.</p>
+      <p class="hero__note" data-i18n="note">These are short, independently authored teaching simulations. They explain a pattern’s concern; they are not production templates.</p>
+    </header>
+
+    <main>
+      <section class="controls" aria-label="Pattern filters">
+        <label class="search">
+          <span data-i18n="searchLabel">Find a pattern</span>
+          <input id="search" type="search" autocomplete="off" data-i18n-placeholder="searchPlaceholder" placeholder="Search by name, family, or catalogue">
+        </label>
+        <label>
+          <span data-i18n="catalogueLabel">Catalogue</span>
+          <select id="catalogue-filter"></select>
+        </label>
+        <label>
+          <span data-i18n="familyLabel">Family</span>
+          <select id="family-filter"></select>
+        </label>
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+      </section>
+
+      <section id="patterns" class="pattern-section" aria-labelledby="catalogue-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="catalogueEyebrow">Pattern library</p>
+            <h2 id="catalogue-title" data-i18n="catalogueTitle">Choose a pattern to explore</h2>
+          </div>
+          <p class="legend" data-i18n="legend">Run opens a result and a three-step data-flow explanation.</p>
+        </div>
+        <div id="pattern-grid" class="pattern-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <template id="pattern-card-template">
+      <article class="pattern-card">
+        <div class="pattern-card__meta"></div>
+        <h3></h3>
+        <p class="pattern-card__description"></p>
+        <p class="pattern-card__goal"></p>
+        <button class="run-button" type="button"></button>
+        <section class="run-result" hidden aria-live="polite">
+          <p class="run-result__input"></p>
+          <p class="run-result__output"></p>
+          <ol class="flow-list"></ol>
+        </section>
+      </article>
+    </template>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

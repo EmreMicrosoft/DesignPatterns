@@ -41,6 +41,20 @@ There is no universal closed list of every design pattern. The research scope
 and extension rule are documented in
 [PATTERN_CATALOG_SCOPE.md](docs/PATTERN_CATALOG_SCOPE.md).
 
+## Interactive web explorer
+
+The dependency-free [web explorer](web/index.html) lists every manifest record
+in English and Turkish. Select a language, search or filter the catalogue, then
+use **Run learning scenario** to show an input, a result, and a concise
+three-step data-flow explanation. It runs a small browser-side teaching model
+for the record's executable concern; it is not a production runtime.
+
+```powershell
+./scripts/serve-web.ps1
+```
+
+Open <http://localhost:8080/web/> while the server is running.
+
 ## Verification
 
 Prerequisites: .NET SDK 10, Python 3 and Node.js 24 or later. For C++ coverage
@@ -52,8 +66,8 @@ static type check is required.
 ./scripts/verify-all.ps1
 ```
 
-The script validates the 38 C# examples and all 246 Python, JavaScript and
-TypeScript contracts. It compiles and runs C++ when a compiler is available;
+The script validates the 38 C# examples, all 246 Python, JavaScript and
+TypeScript contracts, and the browser catalogue's bilingual model. It compiles and runs C++ when a compiler is available;
 otherwise it emits an explicit warning. If `tsc` is available, the script also
 runs a strict static type check. To validate only the C# catalogue, run
 `./scripts/verify-dotnet.ps1`.

@@ -28,6 +28,21 @@ optional locally and is validated in GitHub Actions.
 ./scripts/verify-all.ps1
 ```
 
+## Interactive web explorer
+
+[`web/index.html`](web/index.html) is a dependency-free, bilingual explorer for
+all 246 records. Search or filter the cards, switch between English and
+Turkish, then select **Run learning scenario** to display the input, computed
+result, and a short three-step data-flow explanation. The browser model is a
+small teaching simulation of each record's executable concern, not a production
+runtime.
+
+```powershell
+./scripts/serve-web.ps1
+```
+
+Open <http://localhost:8080/web/> while the server is running.
+
 ## Contributing
 
 Add one independently authored pattern at a time: update the manifest, add an

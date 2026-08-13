@@ -8,6 +8,7 @@ $root = Split-Path -Parent $PSScriptRoot
 python (Join-Path $root 'src/python/catalog.py')
 node (Join-Path $root 'src/javascript/catalog.js')
 node (Join-Path $root 'src/typescript/catalog.ts')
+node --test (Join-Path $root 'web/catalogue-model.test.mjs')
 
 $cppCompiler = Get-Command g++, clang++ -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($null -eq $cppCompiler) {

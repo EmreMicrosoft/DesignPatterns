@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 247;
+const EXPECTED_PATTERN_COUNT = 248;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -110,6 +110,16 @@ function wrapperFacadeContract(): boolean {
   return new CatalogueConnection(new SocketLibrary()).open() === "catalogue:443";
 }
 
+function componentConfiguratorContract(): boolean {
+  class Cache { start(): string { return "cache:ready"; } }
+  class ComponentConfigurator {
+    private readonly factories: ReadonlyMap<string, new () => Cache>;
+    constructor(factories: ReadonlyMap<string, new () => Cache>) { this.factories = factories; }
+    configure(name: string): string { return new (this.factories.get(name)!)().start(); }
+  }
+  return new ComponentConfigurator(new Map([["cache", Cache]])).configure("cache") === "cache:ready";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -136,6 +146,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "client-dispatcher-server": clientDispatcherServerContract,
   "counted-pointer": countedPointerContract,
   "wrapper-facade": wrapperFacadeContract,
+  "component-configurator": componentConfiguratorContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

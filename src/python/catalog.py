@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 247
+EXPECTED_PATTERN_COUNT = 248
 
 
 @dataclass(frozen=True)
@@ -158,6 +158,20 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return CatalogueConnection(SocketLibrary()).open() == "catalogue:443"
 
+    def component_configurator() -> bool:
+        class Cache:
+            def start(self) -> str:
+                return "cache:ready"
+
+        class ComponentConfigurator:
+            def __init__(self, factories: dict[str, Callable[[], Cache]]) -> None:
+                self._factories = factories
+
+            def configure(self, name: str) -> str:
+                return self._factories[name]().start()
+
+        return ComponentConfigurator({"cache": Cache}).configure("cache") == "cache:ready"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -172,6 +186,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "client-dispatcher-server": client_dispatcher_server,
         "counted-pointer": counted_pointer,
         "wrapper-facade": wrapper_facade,
+        "component-configurator": component_configurator,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

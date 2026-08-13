@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 247;
+const EXPECTED_PATTERN_COUNT = 248;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -101,6 +101,15 @@ function wrapperFacadeContract() {
   return new CatalogueConnection(new SocketLibrary()).open() === "catalogue:443";
 }
 
+function componentConfiguratorContract() {
+  class Cache { start() { return "cache:ready"; } }
+  class ComponentConfigurator {
+    constructor(factories) { this.factories = factories; }
+    configure(name) { return new this.factories.get(name)().start(); }
+  }
+  return new ComponentConfigurator(new Map([["cache", Cache]])).configure("cache") === "cache:ready";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -127,6 +136,7 @@ const contracts = Object.freeze({
   "client-dispatcher-server": clientDispatcherServerContract,
   "counted-pointer": countedPointerContract,
   "wrapper-facade": wrapperFacadeContract,
+  "component-configurator": componentConfiguratorContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

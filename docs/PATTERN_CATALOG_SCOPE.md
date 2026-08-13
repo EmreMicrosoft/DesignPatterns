@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 260 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 261 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -50,6 +50,7 @@ Thread-Specific Storage resolves context from a per-worker local slot.
 Distributed Tracing connects one request's service spans through a trace id.
 Exception Tracking records an error with the service context needed to investigate it.
 Log Deployments and Changes records releases so behavior can be correlated with change.
+Server-Side Page Fragment Composition joins independently owned fragments into one page.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Lock
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 252
+EXPECTED_PATTERN_COUNT = 253
 
 
 @dataclass(frozen=True)
@@ -218,6 +219,15 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return Connector(Acceptor()).connect("catalogue-client") == "connected:catalogue-client"
 
+    def scoped_locking() -> bool:
+        lock = Lock()
+        protected_state: list[str] = []
+
+        with lock:
+            protected_state.append("updated")
+
+        return protected_state == ["updated"] and not lock.locked()
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -237,6 +247,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "extension-interface": extension_interface,
         "asynchronous-completion-token": asynchronous_completion_token,
         "acceptor-connector": acceptor_connector,
+        "scoped-locking": scoped_locking,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

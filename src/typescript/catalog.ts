@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 252;
+const EXPECTED_PATTERN_COUNT = 253;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -156,6 +156,21 @@ function acceptorConnectorContract(): boolean {
   return new Connector(new Acceptor()).connect("catalogue-client") === "connected:catalogue-client";
 }
 
+function scopedLockingContract(): boolean {
+  class ScopedLock {
+    #locked = false;
+    run(action: () => string): string {
+      if (this.#locked) throw new Error("The protected state is already locked.");
+      this.#locked = true;
+      try { return action(); } finally { this.#locked = false; }
+    }
+    get isLocked(): boolean { return this.#locked; }
+  }
+  const lock = new ScopedLock();
+  const state = lock.run(() => "updated");
+  return state === "updated" && !lock.isLocked;
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -187,6 +202,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "extension-interface": extensionInterfaceContract,
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
   "acceptor-connector": acceptorConnectorContract,
+  "scoped-locking": scopedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

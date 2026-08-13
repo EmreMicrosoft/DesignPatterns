@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <mutex>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -72,6 +73,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"extension-interface", [] { struct Diagnostics { std::string status() const { return "diagnostics:ready"; } }; struct CatalogueComponent { std::optional<Diagnostics> extension(const std::string& name) const { return name == "diagnostics" ? std::optional<Diagnostics>{Diagnostics{}} : std::nullopt; } }; const auto diagnostics = CatalogueComponent{}.extension("diagnostics"); return diagnostics.has_value() && diagnostics->status() == "diagnostics:ready"; }},
         {"asynchronous-completion-token", [] { struct CompletionToken { std::string requestId; std::optional<std::string> result; void complete(std::string value) { result = std::move(value); } }; CompletionToken token{"run-42"}; token.complete("saved"); return token.requestId == "run-42" && token.result == "saved"; }},
         {"acceptor-connector", [] { struct Acceptor { std::string accept(const std::string& peer) const { return "connected:" + peer; } }; struct Connector { Acceptor acceptor; std::string connect(const std::string& peer) const { return acceptor.accept(peer); } }; return Connector{}.connect("catalogue-client") == "connected:catalogue-client"; }},
+        {"scoped-locking", [] { std::mutex mutex; std::string state; { std::lock_guard<std::mutex> guard{mutex}; state = "updated"; } return state == "updated"; }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

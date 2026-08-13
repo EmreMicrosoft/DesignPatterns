@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 252;
+const EXPECTED_PATTERN_COUNT = 253;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -134,6 +134,21 @@ function acceptorConnectorContract() {
   return new Connector(new Acceptor()).connect("catalogue-client") === "connected:catalogue-client";
 }
 
+function scopedLockingContract() {
+  class ScopedLock {
+    #locked = false;
+    run(action) {
+      if (this.#locked) throw new Error("The protected state is already locked.");
+      this.#locked = true;
+      try { return action(); } finally { this.#locked = false; }
+    }
+    get isLocked() { return this.#locked; }
+  }
+  const lock = new ScopedLock();
+  const state = lock.run(() => "updated");
+  return state === "updated" && !lock.isLocked;
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -165,6 +180,7 @@ const contracts = Object.freeze({
   "extension-interface": extensionInterfaceContract,
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
   "acceptor-connector": acceptorConnectorContract,
+  "scoped-locking": scopedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

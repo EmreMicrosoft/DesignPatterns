@@ -235,6 +235,7 @@ interceptor|POSA2|architecture|Interceptor|interceptor
 extension-interface|POSA2|architecture|Extension Interface|extension-interface
 asynchronous-completion-token|POSA2|architecture|Asynchronous Completion Token|asynchronous-completion-token
 acceptor-connector|POSA2|architecture|Acceptor-Connector|acceptor-connector
+scoped-locking|POSA2|concurrency|Scoped Locking|scoped-locking
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock, local
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 258
+EXPECTED_PATTERN_COUNT = 259
 
 
 @dataclass(frozen=True)
@@ -325,6 +325,15 @@ def contracts() -> dict[str, Callable[[], bool]]:
         trace.record("pricing")
         return trace.spans == ["trace-42:catalogue-api", "trace-42:pricing"]
 
+    def exception_tracking() -> bool:
+        class ExceptionTracker:
+            def __init__(self) -> None: self.reports: list[dict[str, str]] = []
+            def record(self, service: str, error: Exception) -> None: self.reports.append({"service": service, "error": str(error)})
+        tracker = ExceptionTracker()
+        try: raise ValueError("catalogue unavailable")
+        except ValueError as error: tracker.record("catalogue-api", error)
+        return tracker.reports == [{"service": "catalogue-api", "error": "catalogue unavailable"}]
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -350,6 +359,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "double-checked-locking": double_checked_locking,
         "thread-specific-storage": thread_specific_storage,
         "distributed-tracing": distributed_tracing,
+        "exception-tracking": exception_tracking,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

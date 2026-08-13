@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 258;
+const EXPECTED_PATTERN_COUNT = 259;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -244,6 +244,13 @@ function distributedTracingContract(): boolean {
   return trace.spans.join(",") === "trace-42:catalogue-api,trace-42:pricing";
 }
 
+function exceptionTrackingContract(): boolean {
+  class ExceptionTracker { readonly reports: Array<{ service: string; error: string }> = []; record(service: string, error: Error): void { this.reports.push({ service, error: error.message }); } }
+  const tracker = new ExceptionTracker();
+  try { throw new Error("catalogue unavailable"); } catch (error) { tracker.record("catalogue-api", error as Error); }
+  return JSON.stringify(tracker.reports) === '[{"service":"catalogue-api","error":"catalogue unavailable"}]';
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -281,6 +288,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "double-checked-locking": doubleCheckedLockingContract,
   "thread-specific-storage": threadSpecificStorageContract,
   "distributed-tracing": distributedTracingContract,
+  "exception-tracking": exceptionTrackingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

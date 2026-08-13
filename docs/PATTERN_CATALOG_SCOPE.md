@@ -7,7 +7,7 @@ supplemental set, rather than a false claim about every pattern ever published.
 
 ## Implemented, executable set
 
-`src/shared/pattern-catalog.tsv` contains 244 unique, independently authored
+`src/shared/pattern-catalog.tsv` contains 245 unique, independently authored
 records. It covers all patterns and integration styles named in the GoF, PoEAA,
 Enterprise Integration Patterns, Microservices.io and Azure Cloud catalogues,
 after source aliases are consolidated. It also includes 19 frequently used DDD,
@@ -27,7 +27,8 @@ Master-Slave, which distributes work and combines the worker results, and
 Command Processor, which queues commands for controlled execution, and View
 Handler, which maps a view event to an application command, and
 Forwarder-Receiver, which adapts and forwards a message to its receiver, and
-Whole-Part, which maintains the ownership and aggregate behaviour of parts.
+Whole-Part, which maintains the ownership and aggregate behaviour of parts, and
+Client-Dispatcher-Server, which resolves an operation request through a dispatcher.
 
 Every record identifies an executable concern contract (such as routing,
 persistence, resilience or security). Python, JavaScript, TypeScript and C++

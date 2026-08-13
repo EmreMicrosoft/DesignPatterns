@@ -227,6 +227,7 @@ command-processor|POSA1|architecture|Command Processor|command-processor
 view-handler|POSA1|architecture|View Handler|view-handler
 forwarder-receiver|POSA1|architecture|Forwarder-Receiver|forwarder-receiver
 whole-part|POSA1|architecture|Whole-Part|whole-part
+client-dispatcher-server|POSA1|architecture|Client-Dispatcher-Server|client-dispatcher-server
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

@@ -4,7 +4,7 @@
 
 GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure Cloud
 Design Patterns, POSA Volume 1 ekleri ve seçilmiş DDD, mimari ve eşzamanlılık
-desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 244 kayıtlı
+desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 245 kayıtlı
 katalogdur.
 
 ## Diller ve mimari
@@ -16,8 +16,8 @@ katalogdur.
   kimliği, kaynak kataloğu, ailesi ve çalıştırılabilir concern için tek doğruluk
   kaynağıdır.
 
-En son eklenen POSA Volume 1 Whole-Part desenidir: bütün, parçalarını sahiplenir
-ve koordine ederken anlamlı bir bileşik işlem sunar.
+En son eklenen POSA Volume 1 Client-Dispatcher-Server desenidir: istemci bir
+işlemi dispatcher üzerinden ister, dispatcher uygun sunucuyu çözer.
 
 ## Doğrulama
 

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 244
+EXPECTED_PATTERN_COUNT = 245
 
 
 @dataclass(frozen=True)
@@ -115,6 +115,17 @@ def contracts() -> dict[str, Callable[[], bool]]:
         archive.add_part(5)
         return archive.total_size() == 8
 
+    def client_dispatcher_server() -> bool:
+        servers = {"calculate": lambda payload: f"result:{payload * 2}"}
+
+        def dispatcher(operation: str, payload: int) -> str:
+            return servers[operation](payload)
+
+        def client() -> str:
+            return dispatcher("calculate", 21)
+
+        return client() == "result:42"
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -126,6 +137,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "view-handler": view_handler,
         "forwarder-receiver": forwarder_receiver,
         "whole-part": whole_part,
+        "client-dispatcher-server": client_dispatcher_server,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

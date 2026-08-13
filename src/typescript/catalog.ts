@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 238;
+const EXPECTED_PATTERN_COUNT = 239;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -37,6 +37,12 @@ function pacContract(): boolean {
   return presentation() === "selected:report";
 }
 
+function reflectionContract(): boolean {
+  const formatter: Record<string, (value: string) => string> = { upper: (value) => value.toUpperCase() };
+  const operation = formatter["upper"];
+  return operation("catalogue") === "CATALOGUE";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -54,6 +60,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   blackboard: blackboardContract,
   broker: brokerContract,
   pac: pacContract,
+  reflection: reflectionContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

@@ -4,7 +4,7 @@
 
 GoF, PoEAA, Enterprise Integration Patterns, Microservices.io, Azure Cloud
 Design Patterns, eksiksiz POSA Volume 1 kataloğu ve seçilmiş DDD, mimari ve
- eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 253
+ eşzamanlılık desenlerini kapsayan; özgün olarak yazılmış, çalıştırılabilir 254
 kayıtlı katalogdur.
 
 ## Diller ve mimari
@@ -16,8 +16,8 @@ kayıtlı katalogdur.
   kimliği, kaynak kataloğu, ailesi ve çalıştırılabilir concern için tek doğruluk
   kaynağıdır.
 
-En son eklenen POSA Volume 2 Scoped Locking desenidir: bir kilit, ortak durumu
-güncellemenin sözlüksel kapsamı boyunca korur ve sonra bırakılır.
+En son eklenen POSA Volume 2 Strategized Locking desenidir: korunan bir işlem,
+kilitleme politikasını değiştirilebilir bir işbirlikçi olarak alır.
 
 ## Doğrulama
 
@@ -30,7 +30,7 @@ yerelde isteğe bağlıdır; GitHub Actions üzerinde doğrulanır.
 
 ## Etkileşimli web gezgini
 
-[`web/index.html`](web/index.html), 253 kaydın tamamı için bağımlılıksız ve iki
+[`web/index.html`](web/index.html), 254 kaydın tamamı için bağımlılıksız ve iki
 dilli bir gezgindir. Kartları arayın veya filtreleyin, İngilizce ile Türkçe
 arasında geçiş yapın; ardından **Öğrenme senaryosunu çalıştır** düğmesiyle
 girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Tarayıcı

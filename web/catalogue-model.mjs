@@ -1,4 +1,4 @@
-export const EXPECTED_PATTERN_COUNT = 253;
+export const EXPECTED_PATTERN_COUNT = 254;
 
 const text = (en, tr) => ({ en, tr });
 
@@ -52,6 +52,7 @@ const scenarios = {
   "asynchronous-completion-token": scenario(text("carry a result back to work that completed later", "daha sonra tamamlanan işin sonucunu geri taşımak"), text("run-42", "çalıştırma-42"), [text("A caller starts an operation and receives a token.", "Çağıran taraf işlemi başlatır ve bir token alır."), text("The asynchronous work completes using that token.", "Eşzamanlı olmayan iş token ile tamamlanır."), text("The result is associated with the original request.", "Sonuç özgün istekle ilişkilendirilir.")], () => "saved"),
   "acceptor-connector": scenario(text("separate connection setup from later peer processing", "bağlantı kurulumunu sonraki eş işleme adımından ayırmak"), text("catalogue client", "katalog istemcisi"), [text("A connector requests a peer connection.", "Connector bir eş bağlantısı ister."), text("The acceptor establishes and initializes that connection.", "Acceptor bağlantıyı kurar ve başlatır."), text("The peer can now process work independently of setup.", "Eş artık kurulumdan bağımsız olarak işi işleyebilir.")], () => "connected:catalogue-client"),
   "scoped-locking": scenario(text("protect one update for a bounded scope", "tek güncellemeyi sınırlı bir kapsamda korumak"), text("update catalogue state", "katalog durumunu güncelle"), [text("A scope acquires the lock before touching shared state.", "Kapsam ortak duruma dokunmadan önce kilidi alır."), text("The protected update runs while the lock is owned.", "Korunan güncelleme kilit sahipken çalışır."), text("Leaving the scope releases the lock automatically.", "Kapsamdan çıkmak kilidi otomatik bırakır.")], () => "updated"),
+  "strategized-locking": scenario(text("choose a locking policy without changing protected work", "korunan işi değiştirmeden kilitleme politikasını seçmek"), text("increment counter", "sayacı artır"), [text("The counter receives a lock strategy as a dependency.", "Sayaç bir kilit stratejisini bağımlılık olarak alır."), text("The strategy acquires protection around the increment.", "Strateji artırımın çevresinde korumayı alır."), text("The strategy releases protection after the operation.", "İşlemden sonra strateji korumayı bırakır.")], () => "acquire → incremented:1 → release"),
 };
 
 export function parseCatalogue(tsv) {

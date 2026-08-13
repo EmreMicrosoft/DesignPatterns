@@ -3,7 +3,7 @@
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 
-const EXPECTED_PATTERN_COUNT = 253;
+const EXPECTED_PATTERN_COUNT = 254;
 
 function blackboardContract() {
   const sharedFacts = [];
@@ -149,6 +149,23 @@ function scopedLockingContract() {
   return state === "updated" && !lock.isLocked;
 }
 
+function strategizedLockingContract() {
+  class RecordingLock {
+    constructor() { this.events = []; }
+    acquire() { this.events.push("acquire"); }
+    release() { this.events.push("release"); }
+  }
+  class ProtectedCounter {
+    constructor(lockStrategy) { this.lockStrategy = lockStrategy; this.value = 0; }
+    increment() {
+      this.lockStrategy.acquire();
+      try { this.value += 1; return this.value; } finally { this.lockStrategy.release(); }
+    }
+  }
+  const lockStrategy = new RecordingLock();
+  return new ProtectedCounter(lockStrategy).increment() === 1 && lockStrategy.events.join(",") === "acquire,release";
+}
+
 function parseCatalog(path) {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -181,6 +198,7 @@ const contracts = Object.freeze({
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
   "acceptor-connector": acceptorConnectorContract,
   "scoped-locking": scopedLockingContract,
+  "strategized-locking": strategizedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

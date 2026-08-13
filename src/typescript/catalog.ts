@@ -9,7 +9,7 @@ type PatternDefinition = Readonly<{
   contract: string;
 }>;
 
-const EXPECTED_PATTERN_COUNT = 253;
+const EXPECTED_PATTERN_COUNT = 254;
 const readFileSync = require("node:fs").readFileSync;
 
 function blackboardContract(): boolean {
@@ -171,6 +171,26 @@ function scopedLockingContract(): boolean {
   return state === "updated" && !lock.isLocked;
 }
 
+function strategizedLockingContract(): boolean {
+  interface LockStrategy { acquire(): void; release(): void; }
+  class RecordingLock implements LockStrategy {
+    readonly events: string[] = [];
+    acquire(): void { this.events.push("acquire"); }
+    release(): void { this.events.push("release"); }
+  }
+  class ProtectedCounter {
+    private readonly lockStrategy: LockStrategy;
+    private value = 0;
+    constructor(lockStrategy: LockStrategy) { this.lockStrategy = lockStrategy; }
+    increment(): number {
+      this.lockStrategy.acquire();
+      try { this.value += 1; return this.value; } finally { this.lockStrategy.release(); }
+    }
+  }
+  const lockStrategy = new RecordingLock();
+  return new ProtectedCounter(lockStrategy).increment() === 1 && lockStrategy.events.join(",") === "acquire,release";
+}
+
 function parseCatalog(path: string): readonly PatternDefinition[] {
   return readFileSync(path, "utf8")
     .split(/\r?\n/)
@@ -203,6 +223,7 @@ const contracts: Readonly<Record<string, () => boolean>> = {
   "asynchronous-completion-token": asynchronousCompletionTokenContract,
   "acceptor-connector": acceptorConnectorContract,
   "scoped-locking": scopedLockingContract,
+  "strategized-locking": strategizedLockingContract,
   composition: () => ["first", "second"].join("|") === "first|second",
   concurrency: () => new Set(["leader"]).size === 1,
   deployment: () => new Set(["region-a", "region-b"]).size === 2,

@@ -7,7 +7,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Callable
 
-EXPECTED_PATTERN_COUNT = 253
+EXPECTED_PATTERN_COUNT = 254
 
 
 @dataclass(frozen=True)
@@ -228,6 +228,40 @@ def contracts() -> dict[str, Callable[[], bool]]:
 
         return protected_state == ["updated"] and not lock.locked()
 
+    def strategized_locking() -> bool:
+        class LockStrategy:
+            def acquire(self) -> None:
+                raise NotImplementedError
+
+            def release(self) -> None:
+                raise NotImplementedError
+
+        class RecordingLock(LockStrategy):
+            def __init__(self) -> None:
+                self.events: list[str] = []
+
+            def acquire(self) -> None:
+                self.events.append("acquire")
+
+            def release(self) -> None:
+                self.events.append("release")
+
+        class ProtectedCounter:
+            def __init__(self, lock_strategy: LockStrategy) -> None:
+                self._lock_strategy = lock_strategy
+                self._value = 0
+
+            def increment(self) -> int:
+                self._lock_strategy.acquire()
+                try:
+                    self._value += 1
+                    return self._value
+                finally:
+                    self._lock_strategy.release()
+
+        lock_strategy = RecordingLock()
+        return ProtectedCounter(lock_strategy).increment() == 1 and lock_strategy.events == ["acquire", "release"]
+
     return {
         "boundary": lambda: {"request": "accepted"}["request"] == "accepted",
         "blackboard": blackboard,
@@ -248,6 +282,7 @@ def contracts() -> dict[str, Callable[[], bool]]:
         "asynchronous-completion-token": asynchronous_completion_token,
         "acceptor-connector": acceptor_connector,
         "scoped-locking": scoped_locking,
+        "strategized-locking": strategized_locking,
         "composition": lambda: "|".join(["first", "second"]) == "first|second",
         "concurrency": lambda: len({"leader"}) == 1,
         "deployment": lambda: {"region-a", "region-b"} == {"region-a", "region-b"},

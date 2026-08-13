@@ -1,4 +1,5 @@
 import { assertCatalogue, catalogueLabel, parseCatalogue, patternView, runPattern } from "./catalogue-model.mjs";
+import { compatibleCatalogues, compatibleFamilies, resolveVisiblePatterns } from "./filtering.mjs";
 
 const copy = {
   en: {
@@ -7,10 +8,11 @@ const copy = {
     note: "These are short, independently authored teaching simulations. They explain a pattern’s concern; they are not production templates.",
     searchLabel: "Find a pattern", searchPlaceholder: "Search by name, family, or catalogue", catalogueLabel: "Catalogue", familyLabel: "Family",
     allCatalogues: "All catalogues", allFamilies: "All families", catalogueEyebrow: "Pattern library", catalogueTitle: "Choose a pattern to explore",
-    legend: "Run opens a result and a three-step data-flow explanation.", run: "Run learning scenario", input: "Input", flow: "Data flow", results: (count) => `${count} patterns shown`, goal: "What it helps with",
+    legend: "Run opens a result and a three-step data-flow explanation.", run: "Run learning scenario", input: "Input", flow: "Data flow", results: (count) => `${count} patterns shown`, goal: "What it helps with", noSearchMatch: "No pattern matches that search. Showing patterns from your selected filters instead.", resetFilters: "Clear search and filters",
     loading: "Loading the pattern catalogue…", failure: "The catalogue could not be loaded. Start the local web server from the project root and try again.",
   },
   tr: {
+    noSearchMatch: "Bu aramayla eşleşen desen yok. Seçili filtrelerdeki desenler gösteriliyor.", resetFilters: "Aramayı ve filtreleri temizle",
     eyebrow: "Etkileşimli öğrenme kataloğu", title: "Bir tasarım deseninin çalışmasını görün.",
     summary: "Tüm desenleri inceleyin, küçük çalıştırılabilir öğrenme senaryosunu başlatın ve veri akışını adım adım izleyin.",
     note: "Bunlar bağımsız yazılmış kısa öğretim simülasyonlarıdır. Desenin kaygısını açıklar; üretim şablonu değildir.",
@@ -27,6 +29,9 @@ const search = document.querySelector("#search");
 const catalogueFilter = document.querySelector("#catalogue-filter");
 const familyFilter = document.querySelector("#family-filter");
 const count = document.querySelector("#result-count");
+const filterFeedback = document.querySelector("#filter-feedback");
+const filterFeedbackText = document.querySelector("#filter-feedback-text");
+const resetFilters = document.querySelector("#reset-filters");
 const template = document.querySelector("#pattern-card-template");
 
 function translate() { return copy[state.language]; }
@@ -40,26 +45,27 @@ function localizePage() {
   populateFilters();
 }
 
-function addOptions(select, values, allLabel, labelFor) {
+function addOptions(select, values, enabledValues, allLabel, labelFor) {
   const selected = select.value;
-  select.replaceChildren(new Option(allLabel, ""), ...values.map((value) => new Option(labelFor(value), value)));
+  const options = values.filter((value) => enabledValues.has(value)).map((value) => {
+    const option = new Option(labelFor(value), value);
+    return option;
+  });
+  select.replaceChildren(new Option(allLabel, ""), ...options);
   select.value = [...select.options].some((option) => option.value === selected) ? selected : "";
 }
 
 function populateFilters() {
   const catalogues = [...new Set(state.patterns.flatMap((pattern) => pattern.catalogues))].sort();
   const families = [...new Set(state.patterns.map((pattern) => pattern.family))].sort();
-  addOptions(catalogueFilter, catalogues, translate().allCatalogues, (value) => catalogueLabel(value, state.language));
-  addOptions(familyFilter, families, translate().allFamilies, (value) => value.replaceAll("-", " "));
+  addOptions(catalogueFilter, catalogues, compatibleCatalogues(state.patterns, state.family), translate().allCatalogues, (value) => catalogueLabel(value, state.language));
+  addOptions(familyFilter, families, compatibleFamilies(state.patterns, state.catalogue), translate().allFamilies, (value) => value.replaceAll("-", " "));
+  state.catalogue = catalogueFilter.value;
+  state.family = familyFilter.value;
 }
 
 function selectedPatterns() {
-  const query = state.query.trim().toLocaleLowerCase();
-  return state.patterns.filter((pattern) => {
-    const view = patternView(pattern, state.language);
-    const searchable = [pattern.name, pattern.identifier, pattern.family, pattern.catalogues.join(" "), view.description].join(" ").toLocaleLowerCase();
-    return (!query || searchable.includes(query)) && (!state.catalogue || pattern.catalogues.includes(state.catalogue)) && (!state.family || pattern.family === state.family);
-  });
+  return resolveVisiblePatterns(state.patterns, state, state.language, patternView);
 }
 
 function renderRun(panel, pattern) {
@@ -78,8 +84,11 @@ function renderRun(panel, pattern) {
 
 function renderPatterns() {
   const words = translate();
-  const matches = selectedPatterns();
+  const { matches, searchMiss } = selectedPatterns();
   count.textContent = words.results(matches.length);
+  filterFeedback.hidden = !searchMiss;
+  filterFeedbackText.textContent = words.noSearchMatch;
+  resetFilters.textContent = words.resetFilters;
   grid.replaceChildren(...matches.map((pattern) => {
     const card = template.content.firstElementChild.cloneNode(true);
     const view = patternView(pattern, state.language);
@@ -98,8 +107,9 @@ function renderPatterns() {
 
 function bindEvents() {
   search.addEventListener("input", () => { state.query = search.value; renderPatterns(); });
-  catalogueFilter.addEventListener("change", () => { state.catalogue = catalogueFilter.value; renderPatterns(); });
-  familyFilter.addEventListener("change", () => { state.family = familyFilter.value; renderPatterns(); });
+  catalogueFilter.addEventListener("change", () => { state.catalogue = catalogueFilter.value; populateFilters(); renderPatterns(); });
+  familyFilter.addEventListener("change", () => { state.family = familyFilter.value; populateFilters(); renderPatterns(); });
+  resetFilters.addEventListener("click", () => { state.query = ""; state.catalogue = ""; state.family = ""; search.value = ""; populateFilters(); renderPatterns(); search.focus(); });
   document.querySelectorAll("[data-language]").forEach((button) => button.addEventListener("click", () => {
     state.language = button.dataset.language;
     localizePage();

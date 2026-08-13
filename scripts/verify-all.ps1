@@ -12,7 +12,7 @@ node (Join-Path $root 'src/javascript/catalog.js')
 if ($LASTEXITCODE -ne 0) { throw 'JavaScript catalogue verification failed.' }
 node (Join-Path $root 'src/typescript/catalog.ts')
 if ($LASTEXITCODE -ne 0) { throw 'TypeScript catalogue verification failed.' }
-node --test (Join-Path $root 'web/catalogue-model.test.mjs')
+node --test (Join-Path $root 'web/catalogue-model.test.mjs') (Join-Path $root 'web/filtering.test.mjs')
 if ($LASTEXITCODE -ne 0) { throw 'Web catalogue verification failed.' }
 
 $cppCompiler = Get-Command g++, clang++ -ErrorAction SilentlyContinue | Select-Object -First 1

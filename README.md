@@ -47,7 +47,9 @@ and extension rule are documented in
 The dependency-free [web explorer](web/index.html) lists every manifest record
 in English and Turkish. Select a language, search or filter the catalogue, then
 use **Run learning scenario** to show an input, a result, and a concise
-three-step data-flow explanation. It runs a small browser-side teaching model
+three-step data-flow explanation. Faceted filters only offer combinations that
+contain patterns; a search miss keeps the selected results visible and offers a
+one-click reset. It runs a small browser-side teaching model
 for the record's executable concern; it is not a production runtime.
 
 ```powershell

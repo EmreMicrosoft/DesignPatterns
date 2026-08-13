@@ -33,8 +33,10 @@ yerelde isteğe bağlıdır; GitHub Actions üzerinde doğrulanır.
 [`web/index.html`](web/index.html), 262 kaydın tamamı için bağımlılıksız ve iki
 dilli bir gezgindir. Kartları arayın veya filtreleyin, İngilizce ile Türkçe
 arasında geçiş yapın; ardından **Öğrenme senaryosunu çalıştır** düğmesiyle
-girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Tarayıcı
-modeli, her kaydın çalıştırılabilir concern'ine ait küçük bir öğretim
+girdiyi, hesaplanan sonucu ve kısa üç adımlı veri akışını görüntüleyin. Filtreler
+yalnızca desen içeren birleşimleri sunar; arama eşleşmezse yararlı
+sonuçlar korunur ve tek tıklamayla sıfırlama sunulur. Tarayıcı modeli, her
+kaydın çalıştırılabilir concern'ine ait küçük bir öğretim
 simülasyonudur; üretim çalışma zamanı değildir.
 
 ```powershell

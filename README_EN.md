@@ -33,7 +33,9 @@ optional locally and is validated in GitHub Actions.
 [`web/index.html`](web/index.html) is a dependency-free, bilingual explorer for
 all 262 records. Search or filter the cards, switch between English and
 Turkish, then select **Run learning scenario** to display the input, computed
-result, and a short three-step data-flow explanation. The browser model is a
+result, and a short three-step data-flow explanation. Faceted filters only
+offer combinations that contain patterns; a search miss retains useful results
+and offers a one-click reset. The browser model is a
 small teaching simulation of each record's executable concern, not a production
 runtime.
 

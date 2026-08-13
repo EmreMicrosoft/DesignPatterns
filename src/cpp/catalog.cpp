@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace {
-constexpr std::size_t ExpectedPatternCount = 240;
+constexpr std::size_t ExpectedPatternCount = 241;
 
 struct PatternDefinition {
     std::string identifier;
@@ -59,6 +59,7 @@ std::unordered_map<std::string, std::function<bool()>> contracts() {
         {"pac", [] { std::string selected{"none"}; const auto control = [&](const std::string& action) { selected = action.substr(std::string{"select:"}.size()); }; const auto presentation = [&] { return "selected:" + selected; }; control("select:report"); return presentation() == "selected:report"; }},
         {"reflection", [] { const std::unordered_map<std::string, std::function<std::string(std::string)>> formatter{{"upper", [](std::string value) { std::transform(value.begin(), value.end(), value.begin(), [](unsigned char character) { return static_cast<char>(std::toupper(character)); }); return value; }}}; return formatter.at("upper")("catalogue") == "CATALOGUE"; }},
         {"master-slave", [] { const std::vector<std::function<int(int)>> workers{[](int value) { return value * 2; }, [](int value) { return value * 3; }}; int total = 0; for (const auto& worker : workers) total += worker(2); return total == 10; }},
+        {"command-processor", [] { std::vector<std::string> executed; std::vector<std::function<void()>> pending{[&] { executed.push_back("refresh"); }}; pending.front()(); pending.erase(pending.begin()); return executed == std::vector<std::string>{"refresh"} && pending.empty(); }},
         {"composition", [] { return std::string{"first|second"} == "first|second"; }},
         {"concurrency", [] { return std::unordered_set<std::string>{"leader"}.size() == 1; }},
         {"deployment", [] { return std::unordered_set<std::string>{"region-a", "region-b"}.size() == 2; }},

@@ -223,6 +223,7 @@ broker|POSA1|architecture|Broker|broker
 presentation-abstraction-control|POSA1|architecture|Presentation-Abstraction-Control|pac
 reflection|POSA1|architecture|Reflection|reflection
 master-slave|POSA1|architecture|Master-Slave|master-slave
+command-processor|POSA1|architecture|Command Processor|command-processor
 aggregate|Supplemental|domain|Aggregate|boundary
 entity|Supplemental|domain|Entity|state
 bounded-context|Supplemental|domain|Bounded Context|boundary

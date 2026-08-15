@@ -47,13 +47,15 @@ into protected work. Thread-Safe Interface synchronizes every public operation
 that accesses an object's private state. Double-Checked Locking performs lazy
 initialization checks before and inside the synchronization boundary.
 Thread-Specific Storage resolves context from a per-worker local slot.
+Health Check API provides a service liveness/readiness observation boundary.
 Distributed Tracing connects one request's service spans through a trace id.
 Exception Tracking records an error with the service context needed to investigate it.
 Log Deployments and Changes records releases so behavior can be correlated with change.
 Server-Side Page Fragment Composition joins independently owned fragments into one page.
 Client-Side UI Composition joins independently owned UI fragments in the browser.
 
-The audited Microservices.io extension is also complete: Distributed Tracing,
+The audited Microservices.io extension is also complete: Health Check API,
+Distributed Tracing,
 Exception Tracking, Log Deployments and Changes, Server-Side Page Fragment
 Composition and Client-Side UI Composition are now executable records.
 
@@ -87,3 +89,7 @@ tradeoffs, and a self-contained executable verification. Patterns that depend on
 distributed infrastructure should be modelled locally only when the model proves
 the pattern's policy; an in-memory simulation must never be presented as a
 production-ready replacement for transport, persistence or security controls.
+
+The broader, versioned research backlog is maintained in
+[PATTERN_UNIVERSE.md](PATTERN_UNIVERSE.md). It deliberately records source
+aliases and non-code practices separately from executable pattern records.

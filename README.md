@@ -40,7 +40,9 @@ their native idiom.
 
 There is no universal closed list of every design pattern. The research scope
 and extension rule are documented in
-[PATTERN_CATALOG_SCOPE.md](docs/PATTERN_CATALOG_SCOPE.md).
+[PATTERN_CATALOG_SCOPE.md](docs/PATTERN_CATALOG_SCOPE.md). The researched,
+source-linked master inventory (including currently unimplemented candidates)
+is in [PATTERN_UNIVERSE.md](docs/PATTERN_UNIVERSE.md).
 
 ## Interactive web explorer
 

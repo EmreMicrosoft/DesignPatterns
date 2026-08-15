@@ -19,6 +19,13 @@ kayıtlı katalogdur.
 En son eklenen Microservices.io Client-Side UI Composition desenidir: tarayıcı,
 bağımsız sahipli UI parçalarını tek ekranda birleştirir.
 
+## Araştırma envanteri
+
+[`docs/PATTERN_UNIVERSE_TR.md`](docs/PATTERN_UNIVERSE_TR.md), kaynağa bağlı
+ana envanterdir. 262 çalıştırılabilir kaydı; eş anlamlı/kapsanmış kayıtları,
+ayrı örnek gerektiren desen dili kayıtlarını ve doğrudan kodlanmayan
+uygulamaları ayırır; sonraki eklemeler için backlog otoritesidir.
+
 ## Doğrulama
 
 .NET SDK 10, Python 3 ve Node.js 24 veya sonrası gerekir. C++20 derleyicisi

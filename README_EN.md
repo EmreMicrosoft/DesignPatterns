@@ -19,6 +19,13 @@ and concurrency patterns.
 The latest addition is Microservices.io's Client-Side UI Composition pattern:
 the browser composes independently owned UI fragments into one screen.
 
+## Research inventory
+
+[`docs/PATTERN_UNIVERSE.md`](docs/PATTERN_UNIVERSE.md) is the source-linked
+master inventory. It distinguishes the 262 executable records from aliases,
+pattern-language entries that need a distinct example, and non-code practices;
+it is the backlog authority for future additions.
+
 ## Verify
 
 Requires .NET SDK 10, Python 3 and Node.js 24 or later. A C++20 compiler is

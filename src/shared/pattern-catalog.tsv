@@ -39,7 +39,7 @@ idempotent-consumer|Microservices|messaging|Idempotent Consumer|messaging
 pipes-and-filters|EIP;Azure|messaging|Pipes and Filters|composition
 content-based-router|EIP|messaging|Content-Based Router|routing
 dead-letter-channel|EIP|messaging|Dead Letter Channel|messaging
-health-check|Supplemental|operations|Health Check|observability
+health-check|Microservices;Supplemental|operations|Health Check API|observability
 transaction-script|PoEAA|enterprise|Transaction Script|boundary
 domain-model|PoEAA|enterprise|Domain Model|composition
 table-module|PoEAA|enterprise|Table Module|boundary
